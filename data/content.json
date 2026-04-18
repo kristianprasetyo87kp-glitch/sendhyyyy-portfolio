@@ -44,25 +44,25 @@
   "services": [
     {
       "name": "YouTube Shorts",
-      "price": "From IDR 1.500.000",
+      "price": "From IDR 500.000",
       "description": "Short-form vertical video review with natural product integration. Ideal for quick brand awareness and reaching younger audiences.",
       "tags": "Full Review · Product Integration"
     },
     {
-      "name": "YouTube Video ",
-      "price": "From IDR 3.000.000",
+      "name": "YouTube Video (dedicated / intergrated)",
+      "price": "From IDR 1.500.000",
       "description": "2–3 minute advertisement with seamless product integration within a longer video. Feels organic, performs like paid.",
       "tags": "2–3 Min · Ad Format · Product Integration"
     },
     {
-      "name": "YouTube Dedicated",
-      "price": "From IDR 5.000.000",
+      "name": "TikTok Video",
+      "price": "From IDR 500.000",
       "description": "Full-length dedicated YouTube review (8–15 min). Deep-dive product storytelling with high retention and evergreen value.",
       "tags": "Full YouTube Review · Dedicated Video"
     },
     {
-      "name": "Instagram Campaign",
-      "price": "Custom Quote",
+      "name": "Instagram Reels",
+      "price": "From IDR 500.000",
       "description": "Tailored Instagram content package including feed posts, Stories, and Reels. Designed for sustained brand presence and engagement.",
       "tags": "Posts · Stories · Reels · Custom Duration"
     }
