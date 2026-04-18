@@ -10,7 +10,6 @@ const bcrypt    = require('bcryptjs');
 const jwt       = require('jsonwebtoken');
 const multer    = require('multer');
 const nodemailer= require('nodemailer');
-// Node.js v22.5+ has built-in SQLite (no install needed)
 const { DatabaseSync } = require('node:sqlite');
 
 const app  = express();

@@ -4,8 +4,8 @@
   "description": "Sendhy Tangkudung KOL Portfolio with CMS",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node --experimental-sqlite server.js",
+    "dev": "node --experimental-sqlite --watch server.js"
   },
   "engines": {
     "node": ">=22.5.0"
