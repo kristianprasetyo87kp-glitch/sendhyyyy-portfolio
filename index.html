@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sendhy Tangkudung — Content Creator</title>
+  <link rel="icon" id="faviconLink" href="/public/favicon.ico" type="image/x-icon">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+    /* =============================================
+       DESIGN TOKENS — Warm Taupe as PRIMARY
+    ============================================= */
+    :root {
+      /* ── Dark surfaces (warm, taupe-tinted, never cold black) ── */
+      --dk-base:    #1C1510;   /* hero, contact, footer bg */
+      --dk-2:       #251D15;   /* social, portfolio bg */
+      --dk-3:       #2E2418;   /* services bg */
+      --dk-card:    rgba(138,122,112,0.07);  /* card surface on dark */
+
+      /* ── Light surfaces (warm paper) ── */
+      --lt-base:    #F5EDE3;   /* about bg */
+      --lt-2:       #EDE3D8;   /* audience bg */
+      --lt-3:       #E6DAD0;   /* brands bg */
+
+      /* ── PRIMARY: Warm Taupe ── */
+      --taupe:      #8A7A70;   /* PRIMARY — nav, UI, body text (light), decorative */
+      --taupe-dk:   #5C5048;   /* dark taupe — headings on light bg */
+      --taupe-dkr:  #3A2E28;   /* deeper dark — key headings on light bg */
+      --taupe-md:   #6E6058;   /* mid taupe */
+      --taupe-lt:   #B0A49C;   /* light taupe — body text on dark bg */
+      --taupe-xlt:  #CFC6BE;   /* extra light — secondary text on dark */
+
+      /* ── Off-white / Cream ── */
+      --off-white:  #F5EFE6;   /* headings on dark bg */
+      --warm-cream: #EDE3D8;   /* warm cream reference */
+
+      /* ── ACCENT: Dusty Rose ── */
+      --accent:     #C5958A;
+      --accent-lt:  #D4A89E;
+      --accent-dk:  #A6746A;
+      --accent-mu:  rgba(197,149,138,0.22);
+
+      /* ── Borders ── */
+      --bd-dk:      rgba(138,122,112,0.18);   /* on dark */
+      --bd-dk2:     rgba(138,122,112,0.32);
+      --bd-lt:      rgba(92,80,72,0.14);      /* on light */
+      --bd-lt2:     rgba(92,80,72,0.26);
+      --bd-acc:     rgba(197,149,138,0.38);
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; font-size:16px; }
+
+    body {
+      background: var(--dk-base);
+      color: var(--off-white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-track { background: var(--lt-3); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 1px; }
+
+    /* Typography */
+    h1,h2,h3,h4 { font-family:'Cormorant Garamond',serif; font-weight:300; line-height:1.05; }
+    em          { font-style:italic; color:var(--accent); }
+    strong      { font-weight:400; }
+
+    /* Shared labels */
+    .section-label {
+      display:block;
+      font-size:0.67rem; letter-spacing:0.28em; text-transform:uppercase;
+      color:var(--accent);
+      font-family:'DM Sans',sans-serif; font-weight:400;
+      margin-bottom:0.9rem;
+    }
+
+    /* =============================================
+       GRAIN (paper texture)
+    ============================================= */
+    .grain {
+      position:fixed; inset:0; pointer-events:none; z-index:9500; opacity:0.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* =============================================
+       SCROLL REVEAL
+    ============================================= */
+    .reveal {
+      opacity:0; transform:translateY(40px);
+      transition: opacity 0.95s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.95s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.08s} .d2{transition-delay:.16s}
+    .d3{transition-delay:.24s} .d4{transition-delay:.34s}
+
+    /* =============================================
+       NAVIGATION
+    ============================================= */
+    #navbar {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      padding:1.5rem 4rem;
+      display:flex; justify-content:space-between; align-items:center;
+      transition:background .5s ease, padding .4s ease, border-color .5s ease;
+      border-bottom:1px solid transparent;
+    }
+    #navbar.scrolled {
+      background:rgba(28,21,16,0.92);
+      backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+      padding:0.9rem 4rem;
+      border-bottom-color:var(--bd-dk);
+    }
+    .nav-logo {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.25rem; font-weight:400; letter-spacing:.06em;
+      color:var(--off-white); text-decoration:none;
+    }
+    .nav-links { display:flex; gap:2.8rem; list-style:none; }
+    .nav-links a {
+      font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase;
+      color:var(--taupe); text-decoration:none;
+      transition:color .3s ease;
+    }
+    .nav-links a:hover { color:var(--off-white); }
+    .nav-cta {
+      font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--accent); text-decoration:none;
+      border:1px solid var(--bd-acc); padding:.5rem 1.35rem;
+      transition:all .35s cubic-bezier(.16,1,.3,1);
+    }
+    .nav-cta:hover { background:var(--accent); color:var(--dk-base); border-color:var(--accent); }
+    .hamburger {
+      display:none; flex-direction:column; gap:5px;
+      cursor:pointer; background:none; border:none; padding:4px;
+    }
+    .hamburger span { display:block; width:22px; height:1px; background:var(--off-white); transition:all .3s ease; }
+    .mobile-menu {
+      display:none; position:fixed; inset:0;
+      background:rgba(28,21,16,.97); z-index:999;
+      flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
+    }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a {
+      font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-weight:300;
+      color:var(--off-white); text-decoration:none; transition:color .3s ease;
+    }
+    .mobile-menu a:hover { color:var(--accent); }
+    .mobile-menu-close {
+      position:absolute; top:1.5rem; right:2rem;
+      font-size:1.4rem; color:var(--taupe); cursor:pointer; background:none; border:none;
+    }
+
+    /* =============================================
+       HERO  (Dark: warm dk-base)
+    ============================================= */
+    #hero {
+      position:relative; height:100vh; min-height:720px;
+      display:flex; align-items:center; justify-content:center;
+      background:var(--dk-base); overflow:hidden;
+    }
+    .hero-bg {
+      position:absolute; inset:-30%;
+      background:
+        radial-gradient(ellipse at 65% 40%, #3A2518 0%, var(--dk-base) 55%),
+        radial-gradient(ellipse at 18% 72%, rgba(138,122,112,.09) 0%, transparent 50%);
+      will-change:transform;
+    }
+    .hero-bg-lines {
+      position:absolute; inset:0; pointer-events:none; opacity:.04;
+      background-image:repeating-linear-gradient(90deg,
+        var(--taupe) 0px, var(--taupe) 1px,
+        transparent 1px, transparent 12vw);
+    }
+
+    /* Creator animation elements */
+    .hero-creator-els { position:absolute; inset:0; pointer-events:none; z-index:1; }
+    .creator-el { position:absolute; opacity:0; animation:celReveal .9s cubic-bezier(.16,1,.3,1) forwards; }
+    @keyframes celReveal { from{opacity:0;} to{opacity:1;} }
+    .float-inner { display:inline-block; }
+    .el-camera { top:16%; right:11%; animation-delay:1.5s; color:var(--taupe); }
+    .el-camera .float-inner { animation:cfloat1 7s ease-in-out 2.4s infinite; }
+    .el-phone  { top:38%; left:7%;  animation-delay:1.8s; color:rgba(197,149,138,.5); }
+    .el-phone  .float-inner { animation:cfloat2 8s ease-in-out 2.7s infinite; }
+    .el-frame  { bottom:20%; right:9%; animation-delay:2.0s; }
+    .el-frame  .float-inner { animation:cfloat3 9s ease-in-out 3.0s infinite; }
+    .el-sp1{top:30%;left:20%;font-size:.85rem;color:var(--accent);animation-delay:2.4s}
+    .el-sp1 .float-inner{animation:sparkle 3.2s ease-in-out 3.2s infinite}
+    .el-sp2{top:68%;right:16%;font-size:.55rem;color:rgba(197,149,138,.55);animation-delay:2.7s}
+    .el-sp2 .float-inner{animation:sparkle 4.1s ease-in-out 3.5s infinite}
+    .el-sp3{bottom:30%;left:16%;font-size:.45rem;color:rgba(138,122,112,.5);animation-delay:3.0s}
+    .el-sp3 .float-inner{animation:sparkle 3.7s ease-in-out 3.8s infinite}
+    .el-sp4{top:52%;right:12%;font-size:.5rem;color:rgba(197,149,138,.35);animation-delay:3.2s}
+    .el-sp4 .float-inner{animation:sparkle 5s ease-in-out 4s infinite}
+    @keyframes cfloat1{0%,100%{transform:translateY(0) rotate(-2.5deg);} 50%{transform:translateY(-18px) rotate(2deg);}}
+    @keyframes cfloat2{0%,100%{transform:translateY(0) rotate(1.5deg);} 50%{transform:translateY(-12px) rotate(-2deg);}}
+    @keyframes cfloat3{0%,100%{transform:translateY(-8px) rotate(-1deg);} 50%{transform:translateY(10px) rotate(1.5deg);}}
+    @keyframes sparkle{0%,100%{opacity:.25;transform:scale(.8) rotate(0deg);} 50%{opacity:1;transform:scale(1.3) rotate(20deg);}}
+    .creator-cam   { width:52px; height:52px; opacity:.65; }
+    .creator-phone { width:28px; height:46px; opacity:.6; }
+    .creator-frame { width:68px; aspect-ratio:9/16; border:1px solid var(--bd-acc); background:rgba(197,149,138,.05); border-radius:6px; display:flex; align-items:center; justify-content:center; position:relative; }
+    .creator-frame::after { content:''; position:absolute; bottom:8px; left:8px; right:8px; height:1.5px; background:rgba(197,149,138,.3); border-radius:1px; }
+    .creator-frame-play { font-size:1rem; color:rgba(197,149,138,.5); }
+    .creator-sub-bar { display:flex; align-items:center; gap:.5rem; border:1px solid var(--bd-acc); padding:.4rem .75rem; background:rgba(197,149,138,.04); }
+    .sub-bar-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:.7; }
+    .sub-bar-text { font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(197,149,138,.65); }
+    .creator-record { position:relative; width:26px; height:26px; }
+    .record-ring { width:26px; height:26px; border-radius:50%; border:1.5px solid rgba(197,149,138,.6); position:absolute; inset:0; animation:recordPulse 2.2s ease-in-out 3s infinite; }
+    .record-dot { width:10px; height:10px; border-radius:50%; background:var(--accent); opacity:.65; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); }
+    @keyframes recordPulse{0%,100%{transform:scale(1);opacity:.6;} 50%{transform:scale(1.4);opacity:.2;}}
+
+    /* Hero text */
+    .hero-content { position:relative; z-index:2; text-align:center; padding:0 2rem; }
+    .hero-eyebrow {
+      font-size:.67rem; letter-spacing:.36em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:2rem;
+      opacity:0; animation:fadeUp 1s cubic-bezier(.16,1,.3,1) .15s forwards;
+    }
+    .hero-name {
+      font-size:clamp(4.5rem,13vw,11rem);
+      font-family:'Cormorant Garamond',serif; font-weight:300;
+      color:var(--off-white); line-height:.88; letter-spacing:-.01em; margin-bottom:2.2rem;
+      opacity:0; animation:fadeUp 1.3s cubic-bezier(.16,1,.3,1) .35s forwards;
+    }
+    .hero-name .italic-rose { font-style:italic; color:var(--accent-lt); }
+    .hero-subtitle {
+      font-size:clamp(.7rem,1.4vw,.85rem); letter-spacing:.32em; text-transform:uppercase;
+      color:var(--taupe); margin-bottom:1.2rem;
+      opacity:0; animation:fadeUp 1s cubic-bezier(.16,1,.3,1) .75s forwards;
+    }
+    .hero-location {
+      font-size:.78rem; color:var(--taupe-md); letter-spacing:.08em;
+      margin-bottom:3.8rem; display:flex; align-items:center; justify-content:center; gap:.5rem;
+      opacity:0; animation:fadeUp 1s cubic-bezier(.16,1,.3,1) .95s forwards;
+    }
+    .hero-cta {
+      display:inline-block; font-size:.7rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--off-white); text-decoration:none;
+      border:1px solid rgba(138,122,112,.4); padding:1.05rem 2.8rem;
+      position:relative; overflow:hidden;
+      opacity:0; animation:fadeUp 1s cubic-bezier(.16,1,.3,1) 1.15s forwards;
+      transition:border-color .4s ease, color .4s ease;
+    }
+    .hero-cta::before { content:''; position:absolute; inset:0; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform .45s cubic-bezier(.16,1,.3,1); }
+    .hero-cta:hover { border-color:var(--accent); color:var(--dk-base); }
+    .hero-cta:hover::before { transform:scaleX(1); }
+    .hero-cta span { position:relative; z-index:1; }
+    .hero-scroll {
+      position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:.6rem;
+      opacity:0; animation:fadeIn 1s ease 2.2s forwards; pointer-events:none;
+    }
+    .hero-scroll-line { width:1px; height:48px; background:linear-gradient(to bottom, var(--taupe), transparent); animation:scrollPulse 2.4s ease-in-out infinite; }
+    .hero-scroll-text { font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--taupe-md); writing-mode:vertical-lr; transform:rotate(180deg); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(32px);} to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:.7;} }
+    @keyframes scrollPulse { 0%,100%{opacity:.3;transform:scaleY(.8);} 50%{opacity:1;transform:scaleY(1);} }
+
+    /* =============================================
+       ABOUT  (Light: --lt-base warm off-white)
+    ============================================= */
+    #about {
+      padding:9rem 4rem;
+      background:var(--lt-base);
+      position:relative;
+    }
+    #about::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:1px;
+      background:linear-gradient(to right, transparent, var(--bd-acc), transparent);
+    }
+    #about strong { color:var(--taupe-dkr); }
+    #about em     { color:var(--accent-dk); }
+
+    .about-inner { max-width:1400px; margin:0 auto; }
+
+    .about-header .section-label { color:var(--accent); }
+
+    .about-grid {
+      display:grid; grid-template-columns:1fr 1.5fr;
+      gap:6rem; align-items:start; margin-top:4.5rem;
+    }
+    .about-image-wrap { position:relative; padding-top:2rem; padding-left:2rem; }
+    .about-accent-frame {
+      position:absolute; top:0; left:0; width:70%; height:60%;
+      border:1px solid var(--bd-acc);
+      border-radius:48% 52% 45% 55% / 55% 45% 55% 45%;
+      pointer-events:none;
+    }
+    .about-image {
+      width:100%; aspect-ratio:3/4;
+      background:linear-gradient(148deg,#D0C4B8 0%,#BEB0A4 40%,#C8BEB4 100%);
+      border-radius:48% 52% 46% 54% / 58% 46% 54% 42%;
+      overflow:hidden; position:relative; will-change:transform;
+    }
+    .about-image::after {
+      content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
+      background:linear-gradient(to bottom, transparent 55%, rgba(28,21,16,.3) 100%);
+    }
+    .about-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top; display:block; z-index:1; }
+    .about-image-ph { position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:.6rem; }
+    .about-image-ph span { font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--taupe-md); }
+    .about-image-ph .ph-hint { font-size:.54rem; color:var(--taupe); opacity:.7; }
+    .about-image-ph svg { color:var(--taupe); opacity:.4; }
+    .about-image.no-photo .about-photo { display:none; }
+
+    .about-text { padding-top:1rem; }
+    .about-text .section-title {
+      font-size:clamp(2.8rem,4.5vw,4rem);
+      color:var(--taupe-dkr);
+    }
+    .about-bio { font-size:1rem; line-height:1.95; color:var(--taupe-dk); margin-bottom:1.4rem; }
+    .about-signature { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:2.4rem; color:var(--accent); line-height:1; margin-top:2.2rem; margin-bottom:3.5rem; }
+
+    .stats-row {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+      padding-top:2.5rem; border-top:1px solid var(--bd-lt); margin-top:2rem;
+    }
+    .stat-item { padding:0 2rem; border-right:1px solid var(--bd-lt); }
+    .stat-item:first-child { padding-left:0; }
+    .stat-item:last-child { border-right:none; }
+    .stat-num { display:block; font-family:'Cormorant Garamond',serif; font-size:3.2rem; font-weight:300; color:var(--taupe-dkr); line-height:1; margin-bottom:.4rem; }
+    .stat-lbl { font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--taupe); }
+
+    /* =============================================
+       SOCIAL  (Dark: --dk-2)
+    ============================================= */
+    #social { padding:9rem 4rem; background:var(--dk-2); position:relative; overflow:hidden; }
+    #social::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,var(--bd-acc),transparent); }
+
+    .social-inner { max-width:1400px; margin:0 auto; }
+    #social .section-title { color:var(--off-white); }
+
+    .social-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:4.5rem; }
+    .social-card {
+      background:var(--dk-card); border:1px solid var(--bd-dk);
+      padding:2.8rem; position:relative; overflow:hidden;
+      transition:transform .45s cubic-bezier(.16,1,.3,1), border-color .3s ease, box-shadow .45s cubic-bezier(.16,1,.3,1);
+    }
+    .social-card::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% -10%,rgba(138,122,112,.12) 0%,transparent 65%); opacity:0; transition:opacity .4s ease; }
+    .social-card:hover { transform:translateY(-8px); border-color:var(--bd-dk2); box-shadow:0 24px 64px rgba(0,0,0,.35),0 0 0 1px rgba(138,122,112,.12); }
+    .social-card:hover::before { opacity:1; }
+    .social-icon  { width:36px; height:36px; color:var(--taupe); margin-bottom:1.6rem; }
+    .social-platform-name { font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--taupe-md); margin-bottom:.4rem; }
+    .social-handle { font-family:'Cormorant Garamond',serif; font-size:1.45rem; color:var(--off-white); margin-bottom:2rem; }
+    .social-metrics { display:flex; gap:2.2rem; }
+    .s-metric-val { display:block; font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:var(--off-white); line-height:1; }
+    .s-metric-lbl { font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--taupe); margin-top:.3rem; }
+    .social-note { text-align:center; margin-top:3rem; font-size:.68rem; letter-spacing:.1em; color:var(--taupe-md); }
+    .social-note span { color:var(--accent); }
+
+    /* =============================================
+       AUDIENCE  (Light: --lt-2 warm cream)
+    ============================================= */
+    #audience { padding:9rem 4rem; background:var(--lt-2); position:relative; overflow:hidden; }
+    #audience::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,var(--bd-acc),transparent); }
+    #audience strong { color:var(--taupe-dkr); }
+
+    .audience-bg-glow {
+      position:absolute; inset:-20%;
+      background:radial-gradient(ellipse at 25% 50%, rgba(197,149,138,.07) 0%,transparent 55%);
+      will-change:transform; pointer-events:none;
+    }
+    .audience-inner { max-width:1400px; margin:0 auto; position:relative; z-index:1; }
+    #audience .section-title { color:var(--taupe-dkr); }
+
+    .audience-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:4.5rem; margin-top:5rem; }
+
+    .insights-block-title { font-size:.62rem; letter-spacing:.26em; text-transform:uppercase; color:var(--accent); margin-bottom:2rem; }
+    .bar-item { margin-bottom:1.6rem; }
+    .bar-label { display:flex; justify-content:space-between; margin-bottom:.55rem; }
+    .bar-label .bl { font-size:.88rem; color:var(--taupe-dkr); }
+    .bar-label .bv { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--accent-dk); }
+    .bar-track { height:1px; background:var(--bd-lt); position:relative; overflow:visible; }
+    .bar-fill { position:absolute; top:-1px; left:0; height:3px; background:linear-gradient(to right,var(--accent-dk),var(--accent-lt)); width:0; transition:width 1.6s cubic-bezier(.16,1,.3,1); border-radius:2px; }
+
+    .gender-title { font-size:.62rem; letter-spacing:.26em; text-transform:uppercase; color:var(--accent); margin-bottom:2rem; }
+    .gender-bar-wrap { height:4px; background:var(--bd-lt); border-radius:2px; overflow:hidden; margin-bottom:1.5rem; }
+    .gender-f-fill { height:100%; background:linear-gradient(to right,var(--accent-dk),var(--accent-lt)); width:0; transition:width 1.6s cubic-bezier(.16,1,.3,1); }
+    .gender-labels { display:flex; justify-content:space-between; margin-bottom:3rem; }
+    .g-lbl { display:flex; align-items:center; gap:.5rem; }
+    .g-dot { width:6px; height:6px; border-radius:50%; }
+    .g-dot.f { background:var(--accent); }
+    .g-dot.m { background:var(--taupe); }
+    .g-lbl-txt { font-size:.78rem; color:var(--taupe-dk); }
+    .g-pct { font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:var(--taupe-dkr); margin-left:.4rem; }
+
+    .loc-list { list-style:none; }
+    .loc-item { display:flex; align-items:center; justify-content:space-between; padding:1rem 0; border-bottom:1px solid var(--bd-lt); }
+    .loc-item:last-child { border-bottom:none; }
+    .loc-name { font-size:.9rem; color:var(--taupe-dk); }
+    .loc-rank { font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:var(--accent-dk); }
+
+    /* =============================================
+       SERVICES  (Dark: --dk-3)
+    ============================================= */
+    #services { padding:9rem 4rem; background:var(--dk-3); position:relative; }
+    #services::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,var(--bd-acc),transparent); }
+
+    .services-inner { max-width:1200px; margin:0 auto; }
+    #services .section-title { color:var(--off-white); }
+
+    .services-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; margin-top:4.5rem; }
+
+    .svc-card {
+      border:1px solid var(--bd-dk); padding:3rem; position:relative; overflow:hidden;
+      transition:border-color .35s ease, background .35s ease;
+    }
+    .svc-card::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+      background:linear-gradient(to right,var(--taupe),var(--accent));
+      transform:scaleX(0); transform-origin:left;
+      transition:transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .svc-card:hover { border-color:var(--bd-dk2); background:rgba(138,122,112,.07); }
+    .svc-card:hover::after { transform:scaleX(1); }
+
+    .svc-icon { width:40px; height:40px; color:var(--taupe); margin-bottom:1.8rem; opacity:.8; }
+    .svc-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.8rem; gap:1rem; }
+    .svc-title { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--off-white); }
+    .svc-price { font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); border:1px solid var(--bd-acc); padding:.3rem .85rem; white-space:nowrap; flex-shrink:0; align-self:flex-start; margin-top:.25rem; }
+    .svc-desc { font-size:.86rem; color:var(--taupe-lt); line-height:1.78; }
+    .svc-tag { display:inline-block; margin-top:1.2rem; font-size:.58rem; letter-spacing:.16em; text-transform:uppercase; color:var(--taupe-md); border:1px solid var(--bd-dk); padding:.25rem .7rem; }
+
+    /* =============================================
+       BRANDS  (Light: --lt-3 warm paper)
+    ============================================= */
+    #brands { padding:9rem 4rem; background:var(--lt-3); overflow:hidden; position:relative; }
+    #brands::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,var(--bd-acc),transparent); }
+
+    .brands-inner { max-width:1400px; margin:0 auto; }
+    #brands .section-title { color:var(--taupe-dkr); }
+
+    .marquee-outer { margin-top:4.5rem; position:relative; overflow:hidden; }
+    .marquee-outer::before,.marquee-outer::after { content:''; position:absolute; top:0; bottom:0; width:120px; z-index:2; pointer-events:none; }
+    .marquee-outer::before { left:0; background:linear-gradient(to right,var(--lt-3),transparent); }
+    .marquee-outer::after  { right:0; background:linear-gradient(to left,var(--lt-3),transparent); }
+
+    .marquee-track { display:flex; width:max-content; animation:marquee 28s linear infinite; }
+    .marquee-track:hover { animation-play-state:paused; }
+    .marquee-item {
+      font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:300;
+      color:rgba(92,80,72,.35); padding:0 2.5rem; white-space:nowrap;
+      letter-spacing:.04em; transition:color .3s ease; cursor:default;
+    }
+    .marquee-item:hover { color:var(--taupe-dkr); }
+    .marquee-sep { font-size:.6rem; color:var(--accent); padding:0 .5rem; display:flex; align-items:center; }
+    @keyframes marquee { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+    /* =============================================
+       PORTFOLIO  (Dark: --dk-2) — CAROUSEL
+    ============================================= */
+    #portfolio { padding:9rem 4rem; background:var(--dk-2); position:relative; }
+    #portfolio::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,var(--bd-acc),transparent); }
+
+    .portfolio-inner { max-width:1400px; margin:0 auto; }
+    #portfolio .section-title { color:var(--off-white); }
+
+    /* Carousel wrapper — clips the overflowing track */
+    .carousel-wrap { margin-top:3.5rem; }
+    .carousel-track-outer { overflow:hidden; }
+    .carousel-track {
+      display:flex;
+      gap:1.2rem;
+      transition:transform .7s cubic-bezier(.16,1,.3,1);
+      will-change:transform;
+    }
+    /* Desktop: ~2 cards + peek of 3rd */
+    .carousel-slide { flex:0 0 calc(50% - 0.6rem); min-width:0; }
+
+    /* Card */
+    .c-card {
+      position:relative; overflow:hidden;
+      border:1px solid var(--bd-dk);
+      background:var(--dk-card);
+    }
+    .c-thumb {
+      width:100%; aspect-ratio:16/9;
+      position:relative; overflow:hidden;
+      transition:transform .7s cubic-bezier(.16,1,.3,1);
+    }
+    .c-thumb img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+    .c-card:hover .c-thumb { transform:scale(1.04); }
+    .c-info {
+      padding:1.1rem 1.4rem 1.3rem;
+      display:flex; justify-content:space-between; align-items:baseline;
+      border-top:1px solid var(--bd-dk);
+    }
+    .c-brand { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--off-white); }
+    .c-type  { font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); }
+
+    /* Navigation row */
+    .carousel-nav {
+      display:flex; align-items:center; gap:1rem; margin-top:2.2rem;
+    }
+    .c-btn {
+      width:42px; height:42px; flex-shrink:0;
+      border:1px solid var(--bd-dk2); background:none;
+      color:var(--taupe); cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:border-color .3s, color .3s, background .3s;
+    }
+    .c-btn:hover:not(:disabled) { border-color:var(--taupe); color:var(--off-white); background:rgba(138,122,112,.08); }
+    .c-btn:disabled { opacity:.22; cursor:default; pointer-events:none; }
+    .c-btn svg { pointer-events:none; }
+
+    /* Counter */
+    .c-counter {
+      font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+      color:var(--taupe-lt); letter-spacing:.06em; flex-shrink:0;
+    }
+    .c-counter strong { color:var(--accent); font-weight:300; }
+
+    /* Progress bar */
+    .c-progress { flex:1; height:1px; background:var(--bd-dk2); position:relative; overflow:hidden; }
+    .c-progress-fill {
+      position:absolute; inset:0 100% 0 0;
+      background:var(--accent);
+      transition:right .7s cubic-bezier(.16,1,.3,1);
+    }
+
+    /* =============================================
+       CONTACT  (Dark: --dk-base warm)
+    ============================================= */
+    #contact { padding:9rem 4rem 6rem; background:var(--dk-base); position:relative; overflow:hidden; }
+    #contact::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(to right,transparent,var(--bd-acc),transparent); }
+    .contact-glow { position:absolute; inset:-20%; background:radial-gradient(ellipse at 72% 48%,rgba(138,122,112,.08) 0%,transparent 55%); will-change:transform; pointer-events:none; }
+    .contact-inner { max-width:960px; margin:0 auto; text-align:center; position:relative; z-index:1; }
+    .contact-headline { font-size:clamp(3.2rem,7vw,6rem); font-weight:300; line-height:1.0; color:var(--off-white); margin-bottom:2.8rem; }
+    .contact-headline em { color:var(--accent); }
+    .contact-email-btn { display:inline-block; font-size:.76rem; letter-spacing:.22em; text-transform:uppercase; color:var(--dk-base); background:var(--accent); text-decoration:none; padding:1.15rem 3.2rem; margin-bottom:4.5rem; transition:background .35s ease,transform .35s ease; }
+    .contact-email-btn:hover { background:var(--taupe-xlt); color:var(--dk-base); transform:translateY(-3px); }
+    .or-divider { font-size:.62rem; letter-spacing:.28em; text-transform:uppercase; color:var(--taupe-md); margin:0 auto 3.5rem; display:flex; align-items:center; gap:1.5rem; justify-content:center; }
+    .or-divider::before,.or-divider::after { content:''; height:1px; width:60px; background:var(--bd-dk); }
+
+    .contact-form { display:grid; grid-template-columns:1fr 1fr; gap:1rem; text-align:left; }
+    .fg { position:relative; }
+    .fg.full { grid-column:1 / -1; }
+    .fg label { display:block; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--taupe); margin-bottom:.55rem; }
+    .fg input,.fg select,.fg textarea { width:100%; background:rgba(138,122,112,.06); border:1px solid var(--bd-dk); color:var(--off-white); padding:.9rem 1rem; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:300; outline:none; transition:border-color .3s ease; -webkit-appearance:none; appearance:none; }
+    .fg input::placeholder,.fg textarea::placeholder { color:var(--taupe-md); }
+    .fg input:focus,.fg select:focus,.fg textarea:focus { border-color:var(--taupe); }
+    .fg textarea { min-height:130px; resize:vertical; }
+    .fg select option { background:var(--dk-3); color:var(--off-white); }
+    .form-btn-wrap { grid-column:1 / -1; display:flex; justify-content:center; margin-top:.5rem; }
+    .form-btn { font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--off-white); background:transparent; border:1px solid var(--bd-dk2); padding:1.05rem 3.2rem; cursor:pointer; font-family:'DM Sans',sans-serif; font-weight:300; transition:all .4s cubic-bezier(.16,1,.3,1); }
+    .form-btn:hover { background:var(--taupe); border-color:var(--taupe); color:var(--off-white); }
+
+    /* =============================================
+       FOOTER  (Dark: --dk-base)
+    ============================================= */
+    #footer { border-top:1px solid var(--bd-dk); padding:3rem 4rem; background:var(--dk-base); }
+    .footer-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+    .footer-logo { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--taupe-xlt); font-weight:300; }
+    .footer-socials { display:flex; gap:1.8rem; }
+    .footer-socials a { font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--taupe); text-decoration:none; transition:color .3s ease; }
+    .footer-socials a:hover { color:var(--accent); }
+    .footer-copy { font-size:.62rem; letter-spacing:.1em; color:var(--taupe-md); }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width:1024px) {
+      .social-grid { grid-template-columns:repeat(2,1fr); }
+      .services-grid { grid-template-columns:1fr 1fr; }
+      .audience-grid { grid-template-columns:1fr 1fr; gap:3rem; }
+      .audience-grid > .insights-block:last-child { grid-column:1 / -1; }
+    }
+    @media (max-width:768px) {
+      #navbar { padding:1.2rem 1.5rem; }
+      #navbar.scrolled { padding:.8rem 1.5rem; }
+      .nav-links,.nav-cta { display:none; }
+      .hamburger { display:flex; }
+      .hero-creator-els { display:none; }
+
+      #about,#audience,#brands { padding:5rem 1.5rem; }
+      #social,#services,#contact { padding:5rem 1.5rem; }
+      #contact { padding:5rem 1.5rem 4rem; }
+
+      .about-grid { grid-template-columns:1fr; gap:3rem; }
+      .about-image-wrap { max-width:320px; margin:0 auto; }
+      .stats-row { grid-template-columns:repeat(3,1fr); }
+      .stat-item { padding:0 1rem; }
+      .stat-num { font-size:2.2rem; }
+
+      .social-grid { grid-template-columns:1fr; }
+      .audience-grid { grid-template-columns:1fr; gap:3rem; }
+      .audience-grid > .insights-block:last-child { grid-column:auto; }
+      .services-grid { grid-template-columns:1fr; }
+
+      .carousel-slide { flex:0 0 calc(85% - 0.6rem); }
+      #portfolio { padding:5rem 1.5rem; }
+      .contact-form { grid-template-columns:1fr; }
+
+      #footer { padding:2rem 1.5rem; }
+      .footer-inner { flex-direction:column; gap:1.5rem; text-align:center; }
+    }
+    @media (max-width:480px) {
+      .carousel-slide { flex:0 0 calc(92% - 0.6rem); }
+      .stats-row { grid-template-columns:1fr; gap:1.5rem; }
+      .stat-item { border-right:none; border-bottom:1px solid var(--bd-lt); padding:0 0 1rem; }
+      .stat-item:last-child { border-bottom:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">✕</button>
+    <a href="#about"     onclick="closeMobileMenu()">About</a>
+    <a href="#social"    onclick="closeMobileMenu()">Presence</a>
+    <a href="#audience"  onclick="closeMobileMenu()">Audience</a>
+    <a href="#services"  onclick="closeMobileMenu()">Services</a>
+    <a href="#portfolio" onclick="closeMobileMenu()">Work</a>
+    <a href="#contact"   onclick="closeMobileMenu()">Contact</a>
+  </div>
+
+  <!-- Nav -->
+  <nav id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="#hero" class="nav-logo">sendhyyyy</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#social">Presence</a></li>
+      <li><a href="#audience">Audience</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Work</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Let's Collab</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ==========================================
+       HERO  (warm dark bg)
+  =========================================== -->
+  <section id="hero" aria-label="Hero">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-bg-lines" aria-hidden="true"></div>
+
+    <div class="hero-creator-els" aria-hidden="true">
+      <div class="creator-el el-camera">
+        <div class="float-inner">
+          <svg class="creator-cam" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.4">
+            <rect x="3" y="12" width="46" height="32" rx="3"/>
+            <circle cx="26" cy="28" r="10"/>
+            <circle cx="26" cy="28" r="5.5"/>
+            <rect x="17" y="7" width="9" height="5" rx="1.5"/>
+            <circle cx="41" cy="19" r="2.5" fill="currentColor" stroke="none" opacity=".5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="creator-el el-phone">
+        <div class="float-inner">
+          <svg class="creator-phone" viewBox="0 0 30 50" fill="none" stroke="currentColor" stroke-width="1.4">
+            <rect x="2" y="2" width="26" height="46" rx="5"/>
+            <rect x="7" y="8" width="16" height="26" rx="2"/>
+            <circle cx="15" cy="42" r="2" fill="currentColor" opacity=".5" stroke="none"/>
+            <polygon points="12,17 12,25 20,21" fill="currentColor" opacity=".55" stroke="none"/>
+          </svg>
+        </div>
+      </div>
+      <div class="creator-el" style="top:24%;left:9%;animation-delay:2.0s">
+        <div class="float-inner" style="animation:cfloat2 6.5s ease-in-out 3s infinite">
+          <div class="creator-sub-bar">
+            <div class="sub-bar-dot"></div>
+            <span class="sub-bar-text">Now Creating</span>
+          </div>
+        </div>
+      </div>
+      <div class="creator-el" style="top:18%;left:10%;animation-delay:2.2s">
+        <div class="float-inner" style="animation:cfloat1 5.5s ease-in-out 3.2s infinite">
+          <div class="creator-record">
+            <div class="record-ring"></div>
+            <div class="record-dot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="creator-el el-frame">
+        <div class="float-inner">
+          <div class="creator-frame">
+            <div class="creator-frame-play">▶</div>
+          </div>
+        </div>
+      </div>
+      <div class="creator-el el-sp1"><div class="float-inner">✦</div></div>
+      <div class="creator-el el-sp2"><div class="float-inner">✦</div></div>
+      <div class="creator-el el-sp3"><div class="float-inner">✦</div></div>
+      <div class="creator-el el-sp4"><div class="float-inner">✦</div></div>
+    </div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow"></p>
+      <h1 class="hero-name">
+        Sendhy<br><span class="italic-rose">Tangkudung</span>
+      </h1>
+      <p class="hero-subtitle">Content Creator</p>
+      <p class="hero-location">
+        <svg width="9" height="12" viewBox="0 0 9 12" fill="none" aria-hidden="true">
+          <path d="M4.5 0C2.57 0 1 1.57 1 3.5c0 2.63 3.5 7.5 3.5 7.5S8 6.13 8 3.5C8 1.57 6.43 0 4.5 0zm0 4.75a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z" fill="currentColor"/>
+        </svg>
+        Jakarta, Indonesia
+      </p>
+      <a href="#portfolio" class="hero-cta"><span>See My Work</span></a>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <div class="hero-scroll-line"></div>
+      <span class="hero-scroll-text">Scroll</span>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       ABOUT  (light warm off-white)
+  =========================================== -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="about-inner">
+      <div class="about-header reveal">
+        <span class="section-label">The Creator</span>
+      </div>
+      <div class="about-grid">
+        <div class="about-image-wrap reveal">
+          <div class="about-accent-frame" aria-hidden="true"></div>
+          <div class="about-image" id="aboutImg">
+            <!--
+              Place your portrait photo in the same folder as this HTML.
+              Name it "photo.jpg" (or update the src attribute below).
+            -->
+            <img
+              src=""
+              alt="Sendhy Tangkudung"
+              class="about-photo"
+              id="aboutPhoto"
+              style="display:none"
+            >
+            <div class="about-image-ph" id="aboutPhotoPlaceholder">
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+                <circle cx="26" cy="19" r="9" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M8 44c0-9.94 8.06-18 18-18s18 8.06 18 18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              <span>photo.jpg</span>
+              <span class="ph-hint">Place your photo in this folder</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-text">
+          <h2 class="section-title reveal" id="about-title">
+            Crafting stories<br>that <em>move</em> people
+          </h2>
+          <p class="about-bio reveal d1" id="cmsBio1">
+            I’m <strong>Sendhy Tangkudung</strong> — a Jakarta-based content creator turning everyday tech into something
+            <strong>aesthetic and personal</strong>. I love playing with <strong>customization, curated visuals, and little details</strong>
+            that make your digital space feel so you. Because the best content isn’t just seen — it’s a vibe you want to live in.
+          </p>
+          <p class="about-bio reveal d2" id="cmsBio2">
+            I believe the best content doesn’t feel like advertising — it feels like
+            <strong>a moment you want to live in</strong>. That philosophy drives every
+            collaboration, from initial concept through to final delivery.
+          </p>
+          <p class="about-signature reveal d3">sendhyyyy</p>
+          <div class="stats-row">
+            <div class="stat-item reveal d1">
+              <span class="stat-num" id="cmsStat1Num">130K+</span>
+              <span class="stat-lbl" id="cmsStat1Lbl">Total Audience</span>
+            </div>
+            <div class="stat-item reveal d2">
+              <span class="stat-num" id="cmsStat2Num">48+</span>
+              <span class="stat-lbl" id="cmsStat2Lbl">Brand Collabs</span>
+            </div>
+            <div class="stat-item reveal d3">
+              <span class="stat-num" id="cmsStat3Num">3 Yrs+</span>
+              <span class="stat-lbl" id="cmsStat3Lbl">Experience</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SOCIAL  (dark warm dk-2)
+  =========================================== -->
+  <section id="social" aria-labelledby="social-title">
+    <div class="social-inner">
+      <div class="reveal">
+        <span class="section-label">Social Presence</span>
+        <h2 class="section-title" id="social-title">Where you'll<br>find me</h2>
+      </div>
+      <div class="social-grid">
+        <article class="social-card reveal d1" data-social-idx="0">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/>
+          </svg>
+          <p class="social-platform-name">Instagram</p>
+          <p class="social-handle">@sendhyyyy</p>
+          <div class="social-metrics">
+            <div><span class="s-metric-val">1,1K</span><span class="s-metric-lbl">Followers</span></div>
+            <div><span class="s-metric-val">5.2%</span><span class="s-metric-lbl">Avg. Engagement</span></div>
+          </div>
+        </article>
+        <article class="social-card reveal d2" data-social-idx="1">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.72a8.18 8.18 0 004.78 1.52V6.8a4.85 4.85 0 01-1.01-.11z"/>
+          </svg>
+          <p class="social-platform-name">TikTok</p>
+          <p class="social-handle">@bysend</p>
+          <div class="social-metrics">
+            <div><span class="s-metric-val">2,9K</span><span class="s-metric-lbl">Followers</span></div>
+            <div><span class="s-metric-val">8.7%</span><span class="s-metric-lbl">Avg. Engagement</span></div>
+          </div>
+        </article>
+        <article class="social-card reveal d3" data-social-idx="2">
+          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.54 3.56 12 3.56 12 3.56s-7.54 0-9.38.49A3.02 3.02 0 00.5 6.19 31.5 31.5 0 000 12a31.5 31.5 0 00.5 5.81 3.02 3.02 0 002.12 2.14c1.84.49 9.38.49 9.38.49s7.54 0 9.38-.49a3.02 3.02 0 002.12-2.14A31.5 31.5 0 0024 12a31.5 31.5 0 00-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+          </svg>
+          <p class="social-platform-name">YouTube</p>
+          <p class="social-handle">sendhyyyy</p>
+          <div class="social-metrics">
+            <div><span class="s-metric-val">20,8K</span><span class="s-metric-lbl">Subscribers</span></div>
+            <div><span class="s-metric-val">4.1%</span><span class="s-metric-lbl">Avg. Engagement</span></div>
+          </div>
+        </article>
+      </div>
+      <p class="social-note reveal d2"><span>✦</span>&nbsp; All metrics verified as of <span>April 2026</span></p>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       AUDIENCE  (light warm cream)
+  =========================================== -->
+  <section id="audience" aria-labelledby="audience-title">
+    <div class="audience-bg-glow" id="audienceBg" aria-hidden="true"></div>
+    <div class="audience-inner">
+      <div class="reveal">
+        <span class="section-label">Audience Data</span>
+        <h2 class="section-title" id="audience-title">Who I Reach</h2>
+      </div>
+      <div class="audience-grid">
+        <div class="insights-block reveal d1" id="ageBlock">
+          <p class="insights-block-title">Age Demographics</p>
+          <div class="bar-item" data-w="30"><div class="bar-label"><span class="bl">18 – 24</span><span class="bv">30%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+          <div class="bar-item" data-w="40"><div class="bar-label"><span class="bl">25 – 34</span><span class="bv">40%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+          <div class="bar-item" data-w="30"><div class="bar-label"><span class="bl">35+</span><span class="bv">30%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+          <div style="margin-top:2.5rem">
+            <p class="insights-block-title">Primary Interests</p>
+            <div class="bar-item" data-w="65"><div class="bar-label"><span class="bl">Aesthetic Tech customization</span><span class="bv">65%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+            <div class="bar-item" data-w="35"><div class="bar-label"><span class="bl">Tech Accessories & Unboxing Experience</span><span class="bv">35%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+          </div>
+        </div>
+        <div class="insights-block reveal d2" id="genderBlock">
+          <p class="gender-title">Gender Split</p>
+          <div class="gender-bar-wrap"><div class="gender-f-fill" id="genderFill"></div></div>
+          <div class="gender-labels">
+            <div class="g-lbl"><div class="g-dot f"></div><span class="g-lbl-txt">Female</span><span class="g-pct">72%</span></div>
+            <div class="g-lbl"><div class="g-dot m"></div><span class="g-lbl-txt">Male</span><span class="g-pct">28%</span></div>
+          </div>
+          <p class="insights-block-title" style="margin-top:2.5rem">Platform Reach</p>
+          <div class="bar-item" data-w="65"><div class="bar-label"><span class="bl">TikTok</span><span class="bv">65%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+          <div class="bar-item" data-w="25"><div class="bar-label"><span class="bl">YouTube</span><span class="bv">25%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+          <div class="bar-item" data-w="10"><div class="bar-label"><span class="bl">Instagram</span><span class="bv">10%</span></div><div class="bar-track"><div class="bar-fill"></div></div></div>
+        </div>
+        <div class="insights-block reveal d3">
+          <p class="insights-block-title">Top Locations</p>
+          <ul class="loc-list">
+            <li class="loc-item"><span class="loc-name">Indonesia</span><span class="loc-rank">#1</span></li>
+            <li class="loc-item"><span class="loc-name">Malaysia</span><span class="loc-rank">#2</span></li>
+            <li class="loc-item"><span class="loc-name">Philippines</span><span class="loc-rank">#3</span></li>
+            <li class="loc-item"><span class="loc-name">Vietnam</span><span class="loc-rank">#4</span></li>
+            <li class="loc-item"><span class="loc-name">Thailand</span><span class="loc-rank">#5</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       SERVICES  (dark dk-3)
+  =========================================== -->
+  <section id="services" aria-labelledby="services-title">
+    <div class="services-inner">
+      <div class="reveal">
+        <span class="section-label">What I Offer</span>
+        <h2 class="section-title" id="services-title">Services &amp;<br>Deliverables</h2>
+      </div>
+      <div class="services-grid">
+        <article class="svc-card reveal d1" data-svc-idx="0">
+          <svg class="svc-icon" viewBox="0 0 40 40" fill="currentColor" aria-hidden="true">
+            <path d="M38 11.1a4.77 4.77 0 00-3.36-3.38C31.7 7 20 7 20 7s-11.7 0-14.64.72A4.77 4.77 0 002 11.1 49.97 49.97 0 001.2 20a49.97 49.97 0 00.8 8.9 4.77 4.77 0 003.36 3.38C8.3 33 20 33 20 33s11.7 0 14.64-.72A4.77 4.77 0 0038 28.9 49.97 49.97 0 0038.8 20a49.97 49.97 0 00-.8-8.9zM16.4 25.4V14.6L26.2 20l-9.8 5.4z" opacity=".75"/>
+          </svg>
+          <div class="svc-header">
+            <h3 class="svc-title">YouTube Shorts</h3>
+            <span class="svc-price">From IDR 1.500.000</span>
+          </div>
+          <p class="svc-desc">Full video review with product integration. Short-form vertical content (max 60s) optimised for YouTube Shorts & Reels cross-posting.</p>
+          <span class="svc-tag">Full Review · Product Integration</span>
+        </article>
+        <article class="svc-card reveal d2" data-svc-idx="1">
+          <svg class="svc-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+            <rect x="3" y="8" width="26" height="22" rx="2"/>
+            <path d="M29 15l8-5v18l-8-5V15z"/>
+            <path d="M10 14h12M10 20h8M10 26h10" stroke-width="1" opacity=".5"/>
+          </svg>
+          <div class="svc-header">
+            <h3 class="svc-title">YouTube Video — Ad</h3>
+            <span class="svc-price">From IDR 3.000.000</span>
+          </div>
+          <p class="svc-desc">2–3 minute advertisement with seamless product integration. Scripted, filmed & edited to align with your brand voice for pre-roll and mid-roll placements.</p>
+          <span class="svc-tag">2–3 Min · Ad Format · Product Integration</span>
+        </article>
+        <article class="svc-card reveal d1" data-svc-idx="2">
+          <svg class="svc-icon" viewBox="0 0 40 40" fill="currentColor" aria-hidden="true">
+            <path d="M38 11.1a4.77 4.77 0 00-3.36-3.38C31.7 7 20 7 20 7s-11.7 0-14.64.72A4.77 4.77 0 002 11.1 49.97 49.97 0 001.2 20a49.97 49.97 0 00.8 8.9 4.77 4.77 0 003.36 3.38C8.3 33 20 33 20 33s11.7 0 14.64-.72A4.77 4.77 0 0038 28.9 49.97 49.97 0 0038.8 20a49.97 49.97 0 00-.8-8.9zM16.4 25.4V14.6L26.2 20l-9.8 5.4z" opacity=".75"/>
+            <circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="1" opacity=".3"/>
+          </svg>
+          <div class="svc-header">
+            <h3 class="svc-title">YouTube Dedicated</h3>
+            <span class="svc-price">From IDR 5.000.000</span>
+          </div>
+          <p class="svc-desc">Full-length dedicated YouTube review (8–15 min). Deep-dive product showcase with honest personal review, tutorial & brand spotlight.</p>
+          <span class="svc-tag">Full YouTube Review · Dedicated Video</span>
+        </article>
+        <article class="svc-card reveal d2" data-svc-idx="3">
+          <svg class="svc-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+            <rect x="2" y="2" width="36" height="36" rx="8"/>
+            <circle cx="20" cy="20" r="7"/>
+            <circle cx="29.5" cy="10.5" r="1.5" fill="currentColor" stroke="none"/>
+            <path d="M2 14h6M32 14h6M14 2v6M14 32v6" stroke-width="1" opacity=".4"/>
+          </svg>
+          <div class="svc-header">
+            <h3 class="svc-title">Instagram Campaign</h3>
+            <span class="svc-price">Custom Quote</span>
+          </div>
+          <p class="svc-desc">Tailored Instagram content package — customised by campaign duration, number of feed posts, Stories, or Reels for launches & brand awareness.</p>
+          <span class="svc-tag">Posts · Stories · Reels · Custom Duration</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       BRANDS  (light warm paper)
+  =========================================== -->
+  <section id="brands" aria-labelledby="brands-title">
+    <div class="brands-inner">
+      <div class="reveal" style="text-align:center">
+        <span class="section-label">Collaborations</span>
+        <h2 class="section-title" id="brands-title">Trusted By</h2>
+      </div>
+      <div class="marquee-outer reveal d1" aria-hidden="true">
+        <div class="marquee-track" id="marqueeTrack">
+          <span class="marquee-item">Wardah</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Somethinc</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Erha Dermatology</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Pigeon</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Scarlett Whitening</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Mineral Botanica</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Dear Me Beauty</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Hada Labo</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Emina Cosmetics</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">BLP Beauty</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Wardah</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Somethinc</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Erha Dermatology</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Pigeon</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Scarlett Whitening</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Mineral Botanica</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Dear Me Beauty</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Hada Labo</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">Emina Cosmetics</span><span class="marquee-sep">✦</span>
+          <span class="marquee-item">BLP Beauty</span><span class="marquee-sep">✦</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       PORTFOLIO  (dark dk-2) — CAROUSEL
+  =========================================== -->
+  <section id="portfolio" aria-labelledby="portfolio-title">
+    <div class="portfolio-inner">
+
+      <div class="reveal">
+        <span class="section-label">Recent Work</span>
+        <h2 class="section-title" id="portfolio-title">Selected Projects</h2>
+      </div>
+
+      <div class="carousel-wrap reveal d1">
+        <!-- Track outer clips overflow -->
+        <div class="carousel-track-outer">
+          <div class="carousel-track" id="carouselTrack">
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#3A2A20 0%,#4A3228 50%,#322018 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Somethinc</span>
+                  <span class="c-type">YouTube Dedicated</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#2A2430 0%,#382E42 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Wardah</span>
+                  <span class="c-type">YouTube Shorts</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#342018 0%,#4A2C24 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">BLP Beauty</span>
+                  <span class="c-type">Instagram Campaign</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#1E2A1C 0%,#2C3C28 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Scarlett</span>
+                  <span class="c-type">YouTube Video — Ad</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#2E2018 0%,#3E2C22 50%,#2A1C14 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Mineral Botanica</span>
+                  <span class="c-type">YouTube Dedicated</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#28241C 0%,#38342A 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Dear Me Beauty</span>
+                  <span class="c-type">YouTube Shorts</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#1E2430 0%,#28303E 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Hada Labo</span>
+                  <span class="c-type">Instagram Campaign</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#302418 0%,#42332A 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Emina</span>
+                  <span class="c-type">YouTube Video — Ad</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="carousel-slide">
+              <div class="c-card">
+                <div class="c-thumb" style="background:linear-gradient(148deg,#22281C 0%,#303820 100%);"></div>
+                <div class="c-info">
+                  <span class="c-brand">Pigeon</span>
+                  <span class="c-type">YouTube Dedicated</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /carousel-track -->
+        </div><!-- /carousel-track-outer -->
+
+        <!-- Nav -->
+        <div class="carousel-nav">
+          <button class="c-btn" id="cPrev" aria-label="Previous">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 12 6 8 10 4"/></svg>
+          </button>
+          <button class="c-btn" id="cNext" aria-label="Next">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 4 10 8 6 12"/></svg>
+          </button>
+          <span class="c-counter" id="cCounter"><strong>01</strong> / 09</span>
+          <div class="c-progress" aria-hidden="true">
+            <div class="c-progress-fill" id="cProgressFill"></div>
+          </div>
+        </div>
+
+      </div><!-- /carousel-wrap -->
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CONTACT  (dark dk-base)
+  =========================================== -->
+  <section id="contact" aria-labelledby="contact-title">
+    <div class="contact-glow" id="contactGlow" aria-hidden="true"></div>
+    <div class="contact-inner">
+      <div class="reveal">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="contact-headline" id="contact-title">
+          Let's Create<br><em>Something</em><br>Together
+        </h2>
+      </div>
+      <a href="mailto:sendhy22@gmail.com" class="contact-email-btn reveal d1">
+        sendhy22@gmail.com
+      </a>
+      <div class="or-divider reveal d2">or send a brief</div>
+      <form class="contact-form reveal d3" id="contactForm" novalidate>
+        <div class="fg">
+          <label for="cf-name">Your Name</label>
+          <input type="text" id="cf-name" name="name" placeholder="Jane Smith" autocomplete="name">
+        </div>
+        <div class="fg">
+          <label for="cf-brand">Brand / Company</label>
+          <input type="text" id="cf-brand" name="brand" placeholder="Brand Name">
+        </div>
+        <div class="fg">
+          <label for="cf-budget">Budget Range</label>
+          <select id="cf-budget" name="budget">
+            <option value="">Select a range</option>
+            <option>Under IDR 1.500.000</option>
+            <option>IDR 1.500.000 – 5.000.000</option>
+            <option>IDR 5.000.000 – 15.000.000</option>
+            <option>IDR 15.000.000+</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label for="cf-email">Email Address</label>
+          <input type="email" id="cf-email" name="email" placeholder="jane@brand.com" autocomplete="email">
+        </div>
+        <div class="fg full">
+          <label for="cf-msg">Tell Me About Your Project</label>
+          <textarea id="cf-msg" name="message" placeholder="What are you working on? What does success look like for you?"></textarea>
+        </div>
+        <div class="form-btn-wrap">
+          <button type="submit" class="form-btn" id="formSubmitBtn">Send Inquiry</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">sendhyyyy</div>
+      <p class="footer-copy">© 2026 Sendhy Tangkudung</p>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       JAVASCRIPT
+  =========================================== -->
+  <script>
+  (function(){
+    'use strict';
+
+    /* NAV */
+    var nb=document.getElementById('navbar');
+    window.addEventListener('scroll',function(){nb.classList.toggle('scrolled',window.scrollY>60);},{passive:true});
+
+    /* MOBILE MENU */
+    var hb=document.getElementById('hamburger'),mm=document.getElementById('mobileMenu'),mc=document.getElementById('mobileMenuClose');
+    function openMM(){mm.classList.add('open');document.body.style.overflow='hidden';}
+    function closeMM(){mm.classList.remove('open');document.body.style.overflow='';}
+    hb.addEventListener('click',openMM);
+    mc.addEventListener('click',closeMM);
+    window.closeMobileMenu=closeMM;
+
+    /* PARALLAX */
+    var heroBg=document.getElementById('heroBg'),audBg=document.getElementById('audienceBg'),
+        cGlow=document.getElementById('contactGlow'),aImg=document.getElementById('aboutImg'),raf=false;
+    function px(){
+      var sy=window.scrollY;
+      if(heroBg) heroBg.style.transform='translateY('+(sy*.38)+'px)';
+      if(aImg){var ar=document.getElementById('about').getBoundingClientRect();aImg.style.transform='translateY('+(-ar.top*.12)+'px)';}
+      if(audBg){var br=document.getElementById('audience').getBoundingClientRect();audBg.style.transform='translateY('+(-br.top*.08)+'px)';}
+      if(cGlow){var cr=document.getElementById('contact').getBoundingClientRect();cGlow.style.transform='translateY('+(-cr.top*.08)+'px)';}
+      raf=false;
+    }
+    window.addEventListener('scroll',function(){if(!raf){raf=true;requestAnimationFrame(px);}},{passive:true});
+
+    /* SCROLL REVEAL */
+    var ro=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target);}});},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+
+    /* BAR CHARTS */
+    function animB(b){b.querySelectorAll('.bar-item').forEach(function(i){var f=i.querySelector('.bar-fill'),w=i.getAttribute('data-w');if(f&&w)setTimeout(function(){f.style.width=w+'%';},350);});}
+    var gf=document.getElementById('genderFill');
+    var bo=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){animB(x.target);if(x.target.id==='genderBlock'&&gf)setTimeout(function(){gf.style.width='72%';},350);bo.unobserve(x.target);}});},{threshold:.25});
+    document.querySelectorAll('.insights-block').forEach(function(el){bo.observe(el);});
+
+    /* CAROUSEL */
+    (function(){
+      var track    = document.getElementById('carouselTrack');
+      var outer    = track.parentElement;
+      var slides   = track.querySelectorAll('.carousel-slide');
+      var prevBtn  = document.getElementById('cPrev');
+      var nextBtn  = document.getElementById('cNext');
+      var counter  = document.getElementById('cCounter');
+      var progFill = document.getElementById('cProgressFill');
+      var total    = slides.length;
+      var current  = 0;
+      var GAP_REM  = 1.2; /* matches CSS gap:1.2rem */
+
+      function perPage(){
+        return window.innerWidth <= 480 ? 1 : window.innerWidth <= 768 ? 1 : 2;
+      }
+      function maxIdx(){ return Math.max(0, total - perPage()); }
+
+      function goTo(n){
+        var pp  = perPage();
+        current = Math.max(0, Math.min(n, maxIdx()));
+
+        /* Compute slide width from outer container */
+        var gap    = GAP_REM * parseFloat(getComputedStyle(document.documentElement).fontSize);
+        var slideW = (outer.offsetWidth - (pp - 1) * gap) / pp;
+        track.style.transform = 'translateX(' + (-(current * (slideW + gap))) + 'px)';
+
+        /* Counter */
+        counter.innerHTML = '<strong>' + String(current + 1).padStart(2,'0') + '</strong> / ' + String(total).padStart(2,'0');
+
+        /* Progress bar: right % counts down from 100 → 0 */
+        var pct = total > 1 ? (current / (total - 1)) * 100 : 100;
+        progFill.style.right = (100 - pct) + '%';
+
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current >= maxIdx();
+      }
+
+      prevBtn.addEventListener('click', function(){ goTo(current - 1); });
+      nextBtn.addEventListener('click', function(){ goTo(current + 1); });
+
+      /* Touch / swipe */
+      var touchStartX = 0;
+      track.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, {passive:true});
+      track.addEventListener('touchend',   function(e){
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        if(Math.abs(dx) > 42) goTo(dx < 0 ? current + 1 : current - 1);
+      }, {passive:true});
+
+      /* Mouse drag */
+      var mouseX = 0, dragging = false;
+      track.addEventListener('mousedown', function(e){ mouseX = e.clientX; dragging = true; });
+      window.addEventListener('mouseup',  function(e){
+        if(!dragging) return; dragging = false;
+        var dx = e.clientX - mouseX;
+        if(Math.abs(dx) > 42) goTo(dx < 0 ? current + 1 : current - 1);
+      });
+
+      /* Keyboard arrows */
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'ArrowLeft')  goTo(current - 1);
+        if(e.key === 'ArrowRight') goTo(current + 1);
+        if(e.key === 'Escape') closeMM();
+      });
+
+      window.addEventListener('resize', function(){ goTo(current); });
+      goTo(0);
+    })();
+
+    /* FORM — POST ke /api/submit */
+    var cf=document.getElementById('contactForm'),fsb=document.getElementById('formSubmitBtn');
+    cf.addEventListener('submit',function(e){
+      e.preventDefault();
+      var name    = document.getElementById('cf-name').value.trim();
+      var email   = document.getElementById('cf-email').value.trim();
+      if(!name||!email){
+        fsb.textContent='Isi nama & email dulu';
+        setTimeout(function(){fsb.textContent='Send Inquiry';},2000);
+        return;
+      }
+      fsb.disabled=true; fsb.textContent='Sending...';
+      fetch('/api/submit',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          name:    name,
+          brand:   document.getElementById('cf-brand').value,
+          budget:  document.getElementById('cf-budget').value,
+          email:   email,
+          message: document.getElementById('cf-msg').value
+        })
+      }).then(function(r){return r.json();}).then(function(data){
+        if(data.success){
+          fsb.textContent='Sent ✓';
+          fsb.style.color='var(--accent)';
+          fsb.style.borderColor='var(--accent)';
+          cf.reset();
+          setTimeout(function(){
+            fsb.textContent='Send Inquiry';
+            fsb.style.color='';
+            fsb.style.borderColor='';
+            fsb.disabled=false;
+          },3500);
+        } else {
+          fsb.textContent='Error — coba lagi';
+          fsb.disabled=false;
+        }
+      }).catch(function(){
+        fsb.textContent='Error — coba lagi';
+        fsb.disabled=false;
+      });
+    });
+
+  })();
+  </script>
+
+  <!-- CMS: inject konten dari /api/content -->
+  <script>
+  (function(){
+    fetch('/api/content').then(function(r){return r.json();}).then(function(d){
+      // ── About ──────────────────────────────
+      var b1=document.getElementById('cmsBio1');
+      var b2=document.getElementById('cmsBio2');
+      if(b1&&d.about&&d.about.bio1) b1.textContent=d.about.bio1;
+      if(b2&&d.about&&d.about.bio2) b2.textContent=d.about.bio2;
+      function setEl(id,val){var el=document.getElementById(id);if(el&&val)el.textContent=val;}
+      setEl('cmsStat1Num',d.about&&d.about.stat1&&d.about.stat1.number);
+      setEl('cmsStat1Lbl',d.about&&d.about.stat1&&d.about.stat1.label);
+      setEl('cmsStat2Num',d.about&&d.about.stat2&&d.about.stat2.number);
+      setEl('cmsStat2Lbl',d.about&&d.about.stat2&&d.about.stat2.label);
+      setEl('cmsStat3Num',d.about&&d.about.stat3&&d.about.stat3.number);
+      setEl('cmsStat3Lbl',d.about&&d.about.stat3&&d.about.stat3.label);
+
+      // ── Social ─────────────────────────────
+      if(d.social&&d.social.length){
+        document.querySelectorAll('[data-social-idx]').forEach(function(card){
+          var i=parseInt(card.getAttribute('data-social-idx'));
+          var s=d.social[i];
+          if(!s)return;
+          var pn=card.querySelector('.social-platform-name');
+          var ph=card.querySelector('.social-handle');
+          var vals=card.querySelectorAll('.s-metric-val');
+          var lbls=card.querySelectorAll('.s-metric-lbl');
+          if(pn)pn.textContent=s.platform;
+          if(ph)ph.textContent=s.handle;
+          if(vals[0])vals[0].textContent=s.metric1;
+          if(vals[1])vals[1].textContent=s.metric2;
+          if(lbls[0])lbls[0].textContent=s.metric1Label;
+          if(lbls[1])lbls[1].textContent=s.metric2Label;
+        });
+      }
+
+      // ── Services ───────────────────────────
+      if(d.services&&d.services.length){
+        document.querySelectorAll('[data-svc-idx]').forEach(function(card){
+          var i=parseInt(card.getAttribute('data-svc-idx'));
+          var s=d.services[i];
+          if(!s)return;
+          var title=card.querySelector('.svc-title');
+          var price=card.querySelector('.svc-price');
+          var desc =card.querySelector('.svc-desc');
+          var tag  =card.querySelector('.svc-tag');
+          if(title)title.textContent=s.name;
+          if(price)price.textContent=s.price;
+          if(desc) desc.textContent =s.description;
+          if(tag)  tag.textContent  =s.tags;
+        });
+      }
+
+      // ── Brands marquee ─────────────────────
+      if(d.brands&&d.brands.length){
+        var track=document.getElementById('marqueeTrack');
+        if(track){
+          var doubled=d.brands.concat(d.brands);
+          track.innerHTML=doubled.map(function(b){
+            return '<span class="marquee-item">'+b+'</span><span class="marquee-sep">✦</span>';
+          }).join('');
+        }
+      }
+
+      // ── Portfolio carousel ─────────────────
+      if(d.portfolio&&d.portfolio.length){
+        var ctrack=document.getElementById('carouselTrack');
+        if(ctrack){
+          ctrack.innerHTML=d.portfolio.map(function(item){
+            // Thumb: gambar jika ada, fallback gradient
+            var thumbHtml = item.thumbnailUrl
+              ? '<img src="'+item.thumbnailUrl+'?t='+Date.now()+'" alt="'+item.brand+'" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0">'
+              : '';
+            var bgStyle = item.thumbnailUrl ? '' : 'background:'+item.gradient;
+            // Play button jika ada link video
+            var videoBtn = item.videoUrl
+              ? '<a href="'+item.videoUrl+'" target="_blank" rel="noopener" class="c-video-link" title="Tonton video">▶</a>'
+              : '';
+            return '<div class="carousel-slide">'
+              +'<div class="c-card">'
+              +'<div class="c-thumb" style="'+bgStyle+';position:relative;overflow:hidden">'
+              +thumbHtml
+              +'</div>'
+              +(videoBtn?'<div class="c-video-overlay">'+videoBtn+'</div>':'')
+              +'<div class="c-info">'
+              +'<span class="c-brand">'+item.brand+'</span>'
+              +'<span class="c-type">'+item.type+'</span>'
+              +'</div></div></div>';
+          }).join('');
+          // Update counter total
+          var total=d.portfolio.length;
+          var counterEl=document.getElementById('cCounter');
+          if(counterEl)counterEl.innerHTML='<strong>01</strong> / '+String(total).padStart(2,'0');
+          // Re-init carousel
+          if(typeof initCarousel==='function')initCarousel();
+        }
+      }
+
+      // ── Favicon ────────────────────────────
+      // Sudah dihandle via <link id="faviconLink"> — browser akan load otomatis
+    }).catch(function(){
+      // Gagal fetch: tampilkan konten statis yang sudah ada, tidak ada yang rusak
+    });
+
+    // ── About Photo ────────────────────────
+    fetch('/api/photo-url').then(function(r){return r.json();}).then(function(d){
+      if(!d.url) return;
+      var img = document.getElementById('aboutPhoto');
+      var ph  = document.getElementById('aboutPhotoPlaceholder');
+      if(!img) return;
+      img.onload = function(){
+        img.style.display = 'block';
+        if(ph) ph.style.display = 'none';
+      };
+      img.onerror = function(){
+        img.style.display = 'none';
+        if(ph) ph.style.display = '';
+      };
+      img.src = d.url + '?' + Date.now(); // cache-bust supaya foto baru langsung tampil
+    }).catch(function(){});
+
+    // Tambah CSS untuk video overlay di carousel
+    var style=document.createElement('style');
+    style.textContent='.c-video-overlay{position:absolute;top:.7rem;right:.7rem;z-index:2}'
+      +'.c-video-link{display:flex;align-items:center;justify-content:center;'
+      +'width:32px;height:32px;background:rgba(197,149,138,.15);'
+      +'border:1px solid rgba(197,149,138,.4);color:var(--accent);'
+      +'font-size:.7rem;text-decoration:none;transition:all .25s;}'
+      +'.c-video-link:hover{background:var(--accent);color:var(--dk-base);}';
+    document.head.appendChild(style);
+  })();
+  </script>
+
+  <!-- Link tersembunyi ke admin panel -->
+  <a href="/admin" aria-label="Admin" style="position:fixed;bottom:0;right:0;padding:4px;opacity:0.01;font-size:8px;color:transparent;z-index:1">⚙</a>
+</body>
+</html>

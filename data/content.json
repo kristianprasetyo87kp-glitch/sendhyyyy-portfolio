@@ -1,0 +1,148 @@
+{
+  "about": {
+    "bio1": "Jakarta-based content creator with a passion for beauty, lifestyle, and authentic storytelling. With a cross-platform presence spanning YouTube, Instagram, and TikTok, she builds genuine connections between brands and real audiences.",
+    "bio2": "She believes great content doesn't feel like advertising — it feels like a recommendation from a friend. Every collaboration is crafted with that intention.",
+    "stat1": {
+      "number": "130K+",
+      "label": "Total Audience"
+    },
+    "stat2": {
+      "number": "48+",
+      "label": "Brand Collabs"
+    },
+    "stat3": {
+      "number": "3 Yrs+",
+      "label": "Experience"
+    }
+  },
+  "social": [
+    {
+      "platform": "Instagram",
+      "handle": "@sendhyyyy",
+      "metric1": "1,1K",
+      "metric1Label": "Followers",
+      "metric2": "5.2%",
+      "metric2Label": "Avg. Engagement"
+    },
+    {
+      "platform": "TikTok",
+      "handle": "@bysend",
+      "metric1": "2,9K",
+      "metric1Label": "Followers",
+      "metric2": "8.7%",
+      "metric2Label": "Avg. Engagement"
+    },
+    {
+      "platform": "YouTube",
+      "handle": "sendhyyyy",
+      "metric1": "20,8K",
+      "metric1Label": "Subscribers",
+      "metric2": "4.1%",
+      "metric2Label": "Avg. Engagement"
+    }
+  ],
+  "services": [
+    {
+      "name": "YouTube Shorts",
+      "price": "From IDR 1.500.000",
+      "description": "Short-form vertical video review with natural product integration. Ideal for quick brand awareness and reaching younger audiences.",
+      "tags": "Full Review · Product Integration"
+    },
+    {
+      "name": "YouTube Video ",
+      "price": "From IDR 3.000.000",
+      "description": "2–3 minute advertisement with seamless product integration within a longer video. Feels organic, performs like paid.",
+      "tags": "2–3 Min · Ad Format · Product Integration"
+    },
+    {
+      "name": "YouTube Dedicated",
+      "price": "From IDR 5.000.000",
+      "description": "Full-length dedicated YouTube review (8–15 min). Deep-dive product storytelling with high retention and evergreen value.",
+      "tags": "Full YouTube Review · Dedicated Video"
+    },
+    {
+      "name": "Instagram Campaign",
+      "price": "Custom Quote",
+      "description": "Tailored Instagram content package including feed posts, Stories, and Reels. Designed for sustained brand presence and engagement.",
+      "tags": "Posts · Stories · Reels · Custom Duration"
+    }
+  ],
+  "brands": [
+    "Wardah",
+    "Somethinc",
+    "Erha Dermatology",
+    "Pigeon",
+    "Scarlett Whitening",
+    "Mineral Botanica",
+    "Dear Me Beauty",
+    "Hada Labo",
+    "Emina Cosmetics",
+    "BLP Beauty"
+  ],
+  "portfolio": [
+    {
+      "id": "1",
+      "brand": "Somethinc",
+      "type": "YouTube Video",
+      "videoUrl": "https://www.youtube.com/watch?v=1AtPBJhGF4c",
+      "gradient": "linear-gradient(148deg,#3A2A20 0%,#4A3228 50%,#322018 100%)",
+      "thumbnailUrl": "/public/thumbs/thumb-1.png"
+    },
+    {
+      "id": "2",
+      "brand": "Wardah",
+      "type": "YouTube Shorts",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#2A2430 0%,#382E42 100%)"
+    },
+    {
+      "id": "3",
+      "brand": "BLP Beauty",
+      "type": "Instagram Campaign",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#342018 0%,#4A2C24 100%)"
+    },
+    {
+      "id": "4",
+      "brand": "Scarlett",
+      "type": "YouTube Video",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#1E2A1C 0%,#2C3C28 100%)"
+    },
+    {
+      "id": "5",
+      "brand": "Mineral Botanica",
+      "type": "YouTube Dedicated",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#2E2018 0%,#3E2C22 50%,#2A1C14 100%)"
+    },
+    {
+      "id": "6",
+      "brand": "Dear Me Beauty",
+      "type": "YouTube Shorts",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#28241C 0%,#38342A 100%)"
+    },
+    {
+      "id": "7",
+      "brand": "Hada Labo",
+      "type": "Instagram Campaign",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#1E2430 0%,#28303E 100%)"
+    },
+    {
+      "id": "8",
+      "brand": "Emina",
+      "type": "YouTube Video",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#302418 0%,#42332A 100%)"
+    },
+    {
+      "id": "9",
+      "brand": "Pigeon",
+      "type": "YouTube Dedicated",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#22281C 0%,#303820 100%)"
+    }
+  ]
+}

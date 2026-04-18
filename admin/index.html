@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Sendhy Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap');
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body {
+      height: 100%;
+      background: #1C1510;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      color: #F5EFE6;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* Grain */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 9;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .login-card {
+      position: relative; z-index: 10;
+      width: 100%; max-width: 400px;
+      padding: 3rem 2.8rem;
+      background: #251D15;
+      border: 1px solid rgba(138,122,112,0.18);
+    }
+
+    .login-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300;
+      color: #F5EFE6;
+      margin-bottom: 0.35rem;
+    }
+    .login-sub {
+      font-size: 0.65rem; letter-spacing: 0.24em; text-transform: uppercase;
+      color: #C5958A;
+      margin-bottom: 2.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #8A7A70;
+      margin-bottom: 0.5rem;
+    }
+    input[type="password"] {
+      width: 100%;
+      background: rgba(138,122,112,0.07);
+      border: 1px solid rgba(138,122,112,0.22);
+      color: #F5EFE6;
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 300;
+      outline: none;
+      transition: border-color 0.3s;
+      -webkit-appearance: none; appearance: none;
+      letter-spacing: 0.08em;
+    }
+    input[type="password"]:focus { border-color: #8A7A70; }
+    input[type="password"]::placeholder { color: #5C5048; letter-spacing: 0; }
+
+    .login-btn {
+      margin-top: 1.4rem;
+      width: 100%;
+      background: #C5958A;
+      color: #1C1510;
+      border: none;
+      padding: 0.9rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem; font-weight: 400;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .login-btn:hover { background: #D4A89E; }
+    .login-btn:active { transform: translateY(1px); }
+    .login-btn:disabled { opacity: 0.5; cursor: default; }
+
+    .error-msg {
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      color: #C5958A;
+      min-height: 1.2rem;
+      text-align: center;
+    }
+
+    .login-footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(138,122,112,0.12);
+      font-size: 0.62rem; letter-spacing: 0.1em;
+      color: #5C5048;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="login-logo">Sendhy Tangkudung</div>
+    <div class="login-sub">Admin Panel</div>
+
+    <form id="loginForm">
+      <label for="pw">Password</label>
+      <input type="password" id="pw" placeholder="Masukkan password" autocomplete="current-password" autofocus>
+      <button type="submit" class="login-btn" id="loginBtn">Masuk</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+
+    <div class="login-footer">Sendhy Portfolio CMS &nbsp;·&nbsp; 2025</div>
+  </div>
+
+  <script>
+    // Kalau sudah login, langsung redirect
+    const existing = localStorage.getItem('adminToken');
+    if (existing) {
+      // Verifikasi token masih valid
+      fetch('/api/admin/content', {
+        headers: { 'Authorization': 'Bearer ' + existing }
+      }).then(r => {
+        if (r.ok) window.location.href = '/admin/dashboard';
+        else localStorage.removeItem('adminToken');
+      }).catch(() => {});
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const pw  = document.getElementById('pw').value;
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('errorMsg');
+
+      if (!pw) { err.textContent = 'Password tidak boleh kosong'; return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Memverifikasi...';
+      err.textContent = '';
+
+      try {
+        const res  = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          localStorage.setItem('adminToken', data.token);
+          window.location.href = '/admin/dashboard';
+        } else {
+          err.textContent = data.error || 'Login gagal';
+          btn.disabled = false;
+          btn.textContent = 'Masuk';
+        }
+      } catch {
+        err.textContent = 'Tidak bisa terhubung ke server';
+        btn.disabled = false;
+        btn.textContent = 'Masuk';
+      }
+    });
+  </script>
+</body>
+</html>

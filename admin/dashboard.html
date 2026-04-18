@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard CMS — Sendhy Portfolio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { font-size:16px; }
+    body {
+      background: #131009;
+      color: #F5EFE6;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: #1C1510; }
+    ::-webkit-scrollbar-thumb { background: #8A7A70; border-radius: 2px; }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      width: 230px; flex-shrink: 0;
+      background: #1C1510;
+      border-right: 1px solid rgba(138,122,112,0.14);
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 1.6rem 1.5rem 1.2rem;
+      border-bottom: 1px solid rgba(138,122,112,0.1);
+    }
+    .sidebar-logo .name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; color: #F5EFE6; font-weight: 300;
+    }
+    .sidebar-logo .tag {
+      font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: #C5958A; margin-top: 2px;
+    }
+    .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+    .nav-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.72rem 1.5rem;
+      font-size: 0.78rem; letter-spacing: 0.06em;
+      color: #8A7A70; cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+      border-left: 2px solid transparent;
+      user-select: none;
+    }
+    .nav-item:hover { color: #CFC6BE; background: rgba(138,122,112,0.05); }
+    .nav-item.active { color: #F5EFE6; border-left-color: #C5958A; background: rgba(197,149,138,0.06); }
+    .nav-item .icon { font-size: 0.85rem; width: 18px; text-align: center; flex-shrink: 0; }
+    .nav-divider { height: 1px; background: rgba(138,122,112,0.1); margin: 0.5rem 1rem; }
+    .sidebar-bottom {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(138,122,112,0.1);
+    }
+    .logout-btn {
+      font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: #5C5048; background: none; border: none; cursor: pointer;
+      transition: color 0.2s; font-family: 'DM Sans', sans-serif;
+      padding: 0;
+    }
+    .logout-btn:hover { color: #C5958A; }
+
+    /* ─── Main Content ─── */
+    .main {
+      margin-left: 230px;
+      flex: 1;
+      padding: 2.5rem 3rem;
+      max-width: calc(100% - 230px);
+    }
+    .page-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(138,122,112,0.12);
+      display: flex; align-items: baseline; justify-content: space-between;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 300;
+      color: #F5EFE6; letter-spacing: -0.01em;
+    }
+    .page-desc {
+      font-size: 0.75rem; color: #8A7A70; margin-top: 0.3rem;
+    }
+
+    /* ─── Tab Panels ─── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── Form Elements ─── */
+    .form-section {
+      background: #1C1510;
+      border: 1px solid rgba(138,122,112,0.14);
+      padding: 1.8rem 2rem;
+      margin-bottom: 1.2rem;
+    }
+    .form-section-title {
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: #C5958A; margin-bottom: 1.4rem;
+    }
+    .form-row { display: grid; gap: 1rem; margin-bottom: 1rem; }
+    .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .fg { display: flex; flex-direction: column; gap: 0.45rem; }
+    .fg label {
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #8A7A70;
+    }
+    .fg input, .fg textarea, .fg select {
+      background: rgba(138,122,112,0.07);
+      border: 1px solid rgba(138,122,112,0.2);
+      color: #F5EFE6;
+      padding: 0.75rem 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; font-weight: 300;
+      outline: none;
+      transition: border-color 0.25s;
+      -webkit-appearance: none; appearance: none;
+      width: 100%;
+    }
+    .fg input:focus, .fg textarea:focus, .fg select:focus { border-color: #8A7A70; }
+    .fg input::placeholder, .fg textarea::placeholder { color: #5C5048; }
+    .fg textarea { min-height: 90px; resize: vertical; }
+    .fg select option { background: #2E2418; }
+
+    /* Save button */
+    .save-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 2rem;
+      background: #C5958A; color: #1C1510;
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase;
+      transition: background 0.25s, transform 0.15s;
+    }
+    .save-btn:hover { background: #D4A89E; }
+    .save-btn:active { transform: translateY(1px); }
+    .save-btn:disabled { opacity: 0.5; cursor: default; }
+    .save-btn.success { background: #6a9e78; color: #fff; }
+    .save-btn.error   { background: #a66a6a; color: #fff; }
+    .save-row { margin-top: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+    .save-feedback { font-size: 0.75rem; color: #8A7A70; }
+
+    /* ─── Card list (Services) ─── */
+    .card-list { display: flex; flex-direction: column; gap: 1rem; }
+    .cms-card {
+      background: #1C1510;
+      border: 1px solid rgba(138,122,112,0.14);
+      padding: 1.5rem 1.8rem;
+    }
+    .cms-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+    .cms-card-title {
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: #C5958A;
+    }
+
+    /* ─── Brands chips ─── */
+    .chips-wrap {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(138,122,112,0.12);
+      border: 1px solid rgba(138,122,112,0.22);
+      padding: 0.3rem 0.7rem;
+      font-size: 0.78rem; color: #CFC6BE;
+    }
+    .chip-remove {
+      background: none; border: none; cursor: pointer;
+      color: #8A7A70; font-size: 0.9rem; line-height: 1;
+      transition: color 0.2s; padding: 0;
+    }
+    .chip-remove:hover { color: #C5958A; }
+    .chip-input-row { display: flex; gap: 0.6rem; }
+    .chip-input {
+      flex: 1;
+      background: rgba(138,122,112,0.07);
+      border: 1px solid rgba(138,122,112,0.2);
+      color: #F5EFE6;
+      padding: 0.6rem 0.8rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 300;
+      outline: none;
+      transition: border-color 0.25s;
+    }
+    .chip-input:focus { border-color: #8A7A70; }
+    .chip-add-btn {
+      padding: 0.6rem 1.2rem;
+      background: rgba(138,122,112,0.14);
+      border: 1px solid rgba(138,122,112,0.28);
+      color: #CFC6BE; cursor: pointer;
+      font-size: 0.75rem; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+    .chip-add-btn:hover { background: rgba(138,122,112,0.25); }
+
+    /* ─── Portfolio cards ─── */
+    .portfolio-list { display: flex; flex-direction: column; gap: 1rem; }
+    .p-card {
+      background: #1C1510;
+      border: 1px solid rgba(138,122,112,0.14);
+      padding: 1.2rem 1.4rem;
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+
+    /* Thumbnail column */
+    .p-thumb-col { display: flex; flex-direction: column; gap: 0.5rem; }
+    .p-thumb-preview {
+      width: 120px; height: 68px; /* 16:9 */
+      background: rgba(138,122,112,0.08);
+      border: 1px solid rgba(138,122,112,0.18);
+      overflow: hidden; position: relative;
+      cursor: pointer; flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .p-thumb-preview:hover { border-color: #8A7A70; }
+    .p-thumb-preview img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .p-thumb-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.3rem;
+      font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #5C5048;
+    }
+    .p-thumb-placeholder svg { opacity: 0.35; }
+    .p-thumb-upload-btn {
+      font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #8A7A70; background: none; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; padding: 0;
+      transition: color 0.2s; text-align: center;
+    }
+    .p-thumb-upload-btn:hover { color: #C5958A; }
+
+    /* Fields column */
+    .p-fields-col { display: flex; flex-direction: column; gap: 0.7rem; }
+    .p-fields-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+    .p-card-remove {
+      padding: 0.55rem 0.8rem;
+      background: none;
+      border: 1px solid rgba(197,149,138,0.2);
+      color: rgba(197,149,138,0.55); cursor: pointer;
+      font-size: 0.65rem; font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s; white-space: nowrap; align-self: start;
+    }
+    .p-card-remove:hover { background: rgba(197,149,138,0.08); color: #C5958A; border-color: rgba(197,149,138,0.5); }
+    .add-item-btn {
+      margin-top: 0.8rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      background: none;
+      border: 1px dashed rgba(138,122,112,0.3);
+      color: #8A7A70; cursor: pointer;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .add-item-btn:hover { border-color: #8A7A70; color: #CFC6BE; }
+
+    /* ─── About photo upload ─── */
+    .photo-upload-wrap {
+      display: flex; align-items: flex-start; gap: 2rem;
+    }
+    .photo-preview-box {
+      width: 140px; flex-shrink: 0;
+      aspect-ratio: 3/4;
+      background: rgba(138,122,112,0.07);
+      border: 1px solid rgba(138,122,112,0.2);
+      overflow: hidden; position: relative;
+    }
+    .photo-preview-inner {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--taupe-lt);
+    }
+    .photo-preview-box img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
+    }
+
+    /* ─── Favicon upload ─── */
+    .favicon-wrap { display: flex; align-items: flex-start; gap: 2rem; }
+    .favicon-preview {
+      width: 64px; height: 64px;
+      background: rgba(138,122,112,0.08);
+      border: 1px solid rgba(138,122,112,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; color: #5C5048; text-align: center;
+      flex-shrink: 0;
+    }
+    .favicon-preview img { width: 100%; height: 100%; object-fit: contain; }
+    .file-drop-area {
+      flex: 1;
+      border: 1px dashed rgba(138,122,112,0.3);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .file-drop-area:hover, .file-drop-area.drag { border-color: #8A7A70; background: rgba(138,122,112,0.04); }
+    .file-drop-area input[type="file"] { display: none; }
+    .file-drop-label {
+      font-size: 0.78rem; color: #8A7A70; line-height: 1.8;
+    }
+    .file-drop-label span { color: #C5958A; cursor: pointer; }
+
+    /* ─── Inbox table ─── */
+    .inbox-table-wrap { overflow-x: auto; }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+    thead tr {
+      border-bottom: 1px solid rgba(138,122,112,0.22);
+    }
+    th {
+      text-align: left; padding: 0.7rem 1rem;
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #8A7A70; font-weight: 400;
+    }
+    td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(138,122,112,0.08);
+      color: #CFC6BE; vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(138,122,112,0.04); }
+    .td-name  { color: #F5EFE6; font-weight: 400; }
+    .td-email { color: #C5958A; }
+    .td-msg   { color: #8A7A70; font-size: 0.78rem; max-width: 260px; }
+    .td-date  { color: #5C5048; font-size: 0.72rem; white-space: nowrap; }
+    .del-btn {
+      background: none; border: none; cursor: pointer;
+      color: rgba(197,149,138,0.4); font-size: 1rem;
+      transition: color 0.2s; padding: 0 0.3rem;
+    }
+    .del-btn:hover { color: #C5958A; }
+    .empty-state {
+      text-align: center; padding: 3rem;
+      font-size: 0.82rem; color: #5C5048;
+    }
+
+    /* ─── Toast ─── */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: #251D15; border: 1px solid rgba(138,122,112,0.28);
+      padding: 0.9rem 1.4rem;
+      font-size: 0.78rem; color: #CFC6BE;
+      transform: translateY(120%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+      z-index: 9999;
+    }
+    .toast.show { transform: translateY(0); }
+    .toast.ok  { border-color: rgba(106,158,120,0.5); color: #a0d4b0; }
+    .toast.err { border-color: rgba(197,149,138,0.5); color: #D4A89E; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .sidebar { width: 200px; }
+      .main { margin-left: 200px; max-width: calc(100% - 200px); padding: 1.8rem 1.5rem; }
+      .p-card { grid-template-columns: 1fr 1fr; }
+      .p-card-remove { grid-column: 1 / -1; width: fit-content; }
+    }
+    @media (max-width: 640px) {
+      .sidebar { position: fixed; left: -230px; transition: left 0.3s; width: 230px; }
+      .sidebar.open { left: 0; }
+      .main { margin-left: 0; max-width: 100%; }
+      .form-row.cols-2, .form-row.cols-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="name">Sendhy Tangkudung</div>
+      <div class="tag">CMS Dashboard</div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" data-tab="about">
+        <span class="icon">✦</span> About
+      </div>
+      <div class="nav-item" data-tab="social">
+        <span class="icon">◎</span> Social Presence
+      </div>
+      <div class="nav-item" data-tab="services">
+        <span class="icon">◈</span> Services
+      </div>
+      <div class="nav-item" data-tab="brands">
+        <span class="icon">◇</span> Brands
+      </div>
+      <div class="nav-item" data-tab="portfolio">
+        <span class="icon">▶</span> Portfolio
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" data-tab="favicon">
+        <span class="icon">⊙</span> Favicon
+      </div>
+      <div class="nav-item" data-tab="inbox">
+        <span class="icon">✉</span> Inbox
+        <span id="inboxBadge" style="margin-left:auto;background:#C5958A;color:#1C1510;font-size:0.58rem;padding:1px 6px;display:none;"></span>
+      </div>
+    </div>
+    <div class="sidebar-bottom">
+      <button class="logout-btn" id="logoutBtn">← Logout</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- ── ABOUT ── -->
+    <div class="tab-panel active" id="tab-about">
+      <div class="page-header">
+        <div>
+          <div class="page-title">About</div>
+          <div class="page-desc">Foto profil, bio, dan statistik</div>
+        </div>
+      </div>
+
+      <!-- Photo Upload -->
+      <div class="form-section">
+        <div class="form-section-title">Foto Profil</div>
+        <div class="photo-upload-wrap">
+
+          <!-- Preview -->
+          <div class="photo-preview-box" id="photoPreviewBox">
+            <div class="photo-preview-inner" id="photoPreviewInner">
+              <svg width="40" height="40" viewBox="0 0 52 52" fill="none" style="opacity:.3">
+                <circle cx="26" cy="19" r="9" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M8 44c0-9.94 8.06-18 18-18s18 8.06 18 18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              <span style="font-size:.6rem;color:#5C5048;margin-top:.4rem">Belum ada foto</span>
+            </div>
+          </div>
+
+          <!-- Drop + controls -->
+          <div style="flex:1">
+            <div class="file-drop-area" id="photoDropArea">
+              <input type="file" id="photoFile" accept=".jpg,.jpeg,.png,.webp">
+              <div class="file-drop-label">
+                Drag &amp; drop foto di sini, atau <span onclick="document.getElementById('photoFile').click()">klik untuk pilih</span><br>
+                <small style="color:#5C5048">Format: .jpg · .png · .webp &nbsp;|&nbsp; Maks. 8MB</small>
+              </div>
+            </div>
+            <div style="margin-top:.6rem;font-size:.72rem;color:#8A7A70" id="photoSelectedName"></div>
+            <div class="save-row">
+              <button class="save-btn" id="uploadPhotoBtn" disabled>Upload Foto</button>
+              <span class="save-feedback" id="fbPhoto"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Bio</div>
+        <div class="form-row">
+          <div class="fg">
+            <label>Paragraf 1</label>
+            <textarea id="about-bio1" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="fg">
+            <label>Paragraf 2</label>
+            <textarea id="about-bio2" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Statistik</div>
+        <div class="form-row cols-3">
+          <div class="fg"><label>Angka 1 (misal: 130K+)</label><input id="stat1-num"></div>
+          <div class="fg"><label>Label 1</label><input id="stat1-lbl"></div>
+        </div>
+        <div class="form-row cols-3">
+          <div class="fg"><label>Angka 2</label><input id="stat2-num"></div>
+          <div class="fg"><label>Label 2</label><input id="stat2-lbl"></div>
+        </div>
+        <div class="form-row cols-3">
+          <div class="fg"><label>Angka 3</label><input id="stat3-num"></div>
+          <div class="fg"><label>Label 3</label><input id="stat3-lbl"></div>
+        </div>
+      </div>
+
+      <div class="save-row">
+        <button class="save-btn" id="saveAbout">Simpan About</button>
+        <span class="save-feedback" id="fbAbout"></span>
+      </div>
+    </div>
+
+    <!-- ── SOCIAL PRESENCE ── -->
+    <div class="tab-panel" id="tab-social">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Social Presence</div>
+          <div class="page-desc">Metrik tiap platform</div>
+        </div>
+      </div>
+      <div class="card-list" id="socialList"></div>
+      <div class="save-row">
+        <button class="save-btn" id="saveSocial">Simpan Social</button>
+        <span class="save-feedback" id="fbSocial"></span>
+      </div>
+    </div>
+
+    <!-- ── SERVICES ── -->
+    <div class="tab-panel" id="tab-services">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Services</div>
+          <div class="page-desc">Layanan dan harga</div>
+        </div>
+      </div>
+      <div class="card-list" id="servicesList"></div>
+      <div class="save-row">
+        <button class="save-btn" id="saveServices">Simpan Services</button>
+        <span class="save-feedback" id="fbServices"></span>
+      </div>
+    </div>
+
+    <!-- ── BRANDS ── -->
+    <div class="tab-panel" id="tab-brands">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Brands</div>
+          <div class="page-desc">Daftar brand kolaborasi (marquee)</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Nama Brand</div>
+        <div class="chips-wrap" id="brandsChips"></div>
+        <div class="chip-input-row">
+          <input type="text" class="chip-input" id="brandInput" placeholder="Tambah nama brand...">
+          <button class="chip-add-btn" id="brandAddBtn">+ Tambah</button>
+        </div>
+      </div>
+      <div class="save-row">
+        <button class="save-btn" id="saveBrands">Simpan Brands</button>
+        <span class="save-feedback" id="fbBrands"></span>
+      </div>
+    </div>
+
+    <!-- ── PORTFOLIO ── -->
+    <div class="tab-panel" id="tab-portfolio">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Portfolio</div>
+          <div class="page-desc">Item carousel — tambah link video sosmed</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Item Carousel</div>
+        <div class="portfolio-list" id="portfolioList"></div>
+        <button class="add-item-btn" id="addPortfolioBtn">+ Tambah Item</button>
+      </div>
+      <div class="save-row">
+        <button class="save-btn" id="savePortfolio">Simpan Portfolio</button>
+        <span class="save-feedback" id="fbPortfolio"></span>
+      </div>
+    </div>
+
+    <!-- ── FAVICON ── -->
+    <div class="tab-panel" id="tab-favicon">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Favicon</div>
+          <div class="page-desc">Ikon tab browser (.ico, .png, .svg — maks 2MB)</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Upload Favicon</div>
+        <div class="favicon-wrap">
+          <div class="favicon-preview" id="faviconPreview">
+            <span>No<br>Favicon</span>
+          </div>
+          <div>
+            <div class="file-drop-area" id="dropArea">
+              <input type="file" id="faviconFile" accept=".ico,.png,.svg">
+              <div class="file-drop-label">
+                Drag &amp; drop file di sini, atau <span onclick="document.getElementById('faviconFile').click()">klik untuk pilih</span><br>
+                <small style="color:#5C5048">Format: .ico · .png · .svg &nbsp;|&nbsp; Maks. 2MB</small>
+              </div>
+            </div>
+            <div class="save-row">
+              <button class="save-btn" id="uploadFaviconBtn" disabled>Upload Favicon</button>
+              <span class="save-feedback" id="fbFavicon"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INBOX ── -->
+    <div class="tab-panel" id="tab-inbox">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Inbox</div>
+          <div class="page-desc">Semua inquiry dari contact form</div>
+        </div>
+      </div>
+      <div class="form-section" style="padding:0;">
+        <div class="inbox-table-wrap">
+          <table id="inboxTable">
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Brand</th>
+                <th>Budget</th>
+                <th>Pesan</th>
+                <th>Waktu</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="inboxBody">
+              <tr><td colspan="7" class="empty-state">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (function(){
+    'use strict';
+
+    // ── Auth check ──────────────────────────────
+    const TOKEN = localStorage.getItem('adminToken');
+    if (!TOKEN) { window.location.href = '/admin'; return; }
+
+    const headers = { 'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json' };
+
+    async function api(method, url, body) {
+      const opts = { method, headers };
+      if (body) opts.body = JSON.stringify(body);
+      const r = await fetch(url, opts);
+      if (r.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin'; }
+      return r;
+    }
+
+    // ── Toast ────────────────────────────────────
+    let toastTimer;
+    function toast(msg, type = 'ok') {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast show ' + type;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { el.className = 'toast'; }, 3000);
+    }
+
+    // ── Tab navigation ───────────────────────────
+    document.querySelectorAll('.nav-item[data-tab]').forEach(function(item) {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        item.classList.add('active');
+        document.getElementById('tab-' + item.dataset.tab).classList.add('active');
+        if (item.dataset.tab === 'inbox') loadInbox();
+      });
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('adminToken');
+      window.location.href = '/admin';
+    });
+
+    // ── Load all content ─────────────────────────
+    let CMS = {};
+
+    async function loadContent() {
+      try {
+        const r = await api('GET', '/api/admin/content');
+        CMS = await r.json();
+        populateAbout(CMS.about);
+        populateSocial(CMS.social);
+        populateServices(CMS.services);
+        populateBrands(CMS.brands);
+        populatePortfolio(CMS.portfolio);
+        loadCurrentFavicon();
+        loadCurrentPhoto();
+      } catch(e) {
+        toast('Gagal memuat konten: ' + e.message, 'err');
+      }
+    }
+
+    async function saveAll(section, data, btnId, fbId) {
+      const btn = document.getElementById(btnId);
+      const fb  = document.getElementById(fbId);
+      btn.disabled = true; btn.textContent = 'Menyimpan...';
+      fb.textContent = '';
+      try {
+        CMS[section] = data;
+        const r = await api('PUT', '/api/admin/content', CMS);
+        if (r.ok) {
+          btn.classList.add('success'); btn.textContent = 'Tersimpan ✓';
+          toast('Section "' + section + '" berhasil disimpan');
+          setTimeout(() => { btn.classList.remove('success'); btn.textContent = btn.dataset.orig; btn.disabled = false; }, 2500);
+        } else {
+          const err = await r.json();
+          throw new Error(err.error || 'Gagal');
+        }
+      } catch(e) {
+        btn.classList.add('error'); btn.textContent = 'Error ✗';
+        fb.textContent = e.message;
+        toast(e.message, 'err');
+        setTimeout(() => { btn.classList.remove('error'); btn.textContent = btn.dataset.orig; btn.disabled = false; }, 3000);
+      }
+    }
+
+    // ══════════════════════════════════════════
+    //  ABOUT
+    // ══════════════════════════════════════════
+    function populateAbout(a) {
+      document.getElementById('about-bio1').value  = a.bio1  || '';
+      document.getElementById('about-bio2').value  = a.bio2  || '';
+      document.getElementById('stat1-num').value   = a.stat1.number || '';
+      document.getElementById('stat1-lbl').value   = a.stat1.label  || '';
+      document.getElementById('stat2-num').value   = a.stat2.number || '';
+      document.getElementById('stat2-lbl').value   = a.stat2.label  || '';
+      document.getElementById('stat3-num').value   = a.stat3.number || '';
+      document.getElementById('stat3-lbl').value   = a.stat3.label  || '';
+    }
+    const saveAboutBtn = document.getElementById('saveAbout');
+    saveAboutBtn.dataset.orig = 'Simpan About';
+    saveAboutBtn.addEventListener('click', function() {
+      saveAll('about', {
+        bio1: document.getElementById('about-bio1').value,
+        bio2: document.getElementById('about-bio2').value,
+        stat1: { number: document.getElementById('stat1-num').value, label: document.getElementById('stat1-lbl').value },
+        stat2: { number: document.getElementById('stat2-num').value, label: document.getElementById('stat2-lbl').value },
+        stat3: { number: document.getElementById('stat3-num').value, label: document.getElementById('stat3-lbl').value }
+      }, 'saveAbout', 'fbAbout');
+    });
+
+    // ══════════════════════════════════════════
+    //  SOCIAL PRESENCE
+    // ══════════════════════════════════════════
+    function populateSocial(social) {
+      const list = document.getElementById('socialList');
+      list.innerHTML = '';
+      social.forEach(function(s, i) {
+        const card = document.createElement('div');
+        card.className = 'cms-card';
+        card.innerHTML = `
+          <div class="cms-card-header">
+            <span class="cms-card-title">Platform ${i+1}</span>
+          </div>
+          <div class="form-row cols-2">
+            <div class="fg"><label>Nama Platform</label>
+              <input data-field="platform" value="${s.platform}"></div>
+            <div class="fg"><label>Handle / Username</label>
+              <input data-field="handle" value="${s.handle}"></div>
+          </div>
+          <div class="form-row cols-2">
+            <div class="fg"><label>Metrik 1 (angka)</label>
+              <input data-field="metric1" value="${s.metric1}"></div>
+            <div class="fg"><label>Label Metrik 1</label>
+              <input data-field="metric1Label" value="${s.metric1Label}"></div>
+          </div>
+          <div class="form-row cols-2">
+            <div class="fg"><label>Metrik 2 (angka)</label>
+              <input data-field="metric2" value="${s.metric2}"></div>
+            <div class="fg"><label>Label Metrik 2</label>
+              <input data-field="metric2Label" value="${s.metric2Label}"></div>
+          </div>`;
+        card.dataset.idx = i;
+        list.appendChild(card);
+      });
+    }
+    const saveSocialBtn = document.getElementById('saveSocial');
+    saveSocialBtn.dataset.orig = 'Simpan Social';
+    saveSocialBtn.addEventListener('click', function() {
+      const cards = document.querySelectorAll('#socialList .cms-card');
+      const data  = Array.from(cards).map(function(card) {
+        const get = f => card.querySelector('[data-field="'+f+'"]').value;
+        return {
+          platform: get('platform'), handle: get('handle'),
+          metric1: get('metric1'), metric1Label: get('metric1Label'),
+          metric2: get('metric2'), metric2Label: get('metric2Label')
+        };
+      });
+      saveAll('social', data, 'saveSocial', 'fbSocial');
+    });
+
+    // ══════════════════════════════════════════
+    //  SERVICES
+    // ══════════════════════════════════════════
+    function populateServices(services) {
+      const list = document.getElementById('servicesList');
+      list.innerHTML = '';
+      services.forEach(function(s, i) {
+        const card = document.createElement('div');
+        card.className = 'cms-card';
+        card.innerHTML = `
+          <div class="cms-card-header">
+            <span class="cms-card-title">Service ${i+1}</span>
+          </div>
+          <div class="form-row cols-2">
+            <div class="fg"><label>Nama Layanan</label>
+              <input data-field="name" value="${esc(s.name)}"></div>
+            <div class="fg"><label>Harga</label>
+              <input data-field="price" value="${esc(s.price)}"></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Deskripsi</label>
+              <textarea data-field="description">${esc(s.description)}</textarea></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Tags (pisahkan dengan ·)</label>
+              <input data-field="tags" value="${esc(s.tags)}"></div>
+          </div>`;
+        card.dataset.idx = i;
+        list.appendChild(card);
+      });
+    }
+    const saveServicesBtn = document.getElementById('saveServices');
+    saveServicesBtn.dataset.orig = 'Simpan Services';
+    saveServicesBtn.addEventListener('click', function() {
+      const cards = document.querySelectorAll('#servicesList .cms-card');
+      const data  = Array.from(cards).map(function(card) {
+        const get = f => card.querySelector('[data-field="'+f+'"]').value;
+        return { name: get('name'), price: get('price'), description: get('description'), tags: get('tags') };
+      });
+      saveAll('services', data, 'saveServices', 'fbServices');
+    });
+
+    // ══════════════════════════════════════════
+    //  BRANDS
+    // ══════════════════════════════════════════
+    let brandsArr = [];
+    function populateBrands(brands) {
+      brandsArr = brands.slice();
+      renderChips();
+    }
+    function renderChips() {
+      const wrap = document.getElementById('brandsChips');
+      wrap.innerHTML = '';
+      brandsArr.forEach(function(b, i) {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.innerHTML = `<span>${esc(b)}</span><button class="chip-remove" data-i="${i}" title="Hapus">×</button>`;
+        wrap.appendChild(chip);
+      });
+      wrap.querySelectorAll('.chip-remove').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          brandsArr.splice(parseInt(btn.dataset.i), 1);
+          renderChips();
+        });
+      });
+    }
+    document.getElementById('brandAddBtn').addEventListener('click', addBrand);
+    document.getElementById('brandInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') { e.preventDefault(); addBrand(); }
+    });
+    function addBrand() {
+      const input = document.getElementById('brandInput');
+      const val   = input.value.trim();
+      if (!val) return;
+      brandsArr.push(val);
+      renderChips();
+      input.value = '';
+      input.focus();
+    }
+    const saveBrandsBtn = document.getElementById('saveBrands');
+    saveBrandsBtn.dataset.orig = 'Simpan Brands';
+    saveBrandsBtn.addEventListener('click', function() {
+      saveAll('brands', brandsArr.slice(), 'saveBrands', 'fbBrands');
+    });
+
+    // ══════════════════════════════════════════
+    //  PORTFOLIO
+    // ══════════════════════════════════════════
+    const GRADIENTS = [
+      'linear-gradient(148deg,#3A2A20 0%,#4A3228 50%,#322018 100%)',
+      'linear-gradient(148deg,#2A2430 0%,#382E42 100%)',
+      'linear-gradient(148deg,#342018 0%,#4A2C24 100%)',
+      'linear-gradient(148deg,#1E2A1C 0%,#2C3C28 100%)',
+      'linear-gradient(148deg,#2E2018 0%,#3E2C22 50%,#2A1C14 100%)',
+      'linear-gradient(148deg,#28241C 0%,#38342A 100%)',
+      'linear-gradient(148deg,#1E2430 0%,#28303E 100%)',
+      'linear-gradient(148deg,#302418 0%,#42332A 100%)',
+      'linear-gradient(148deg,#22281C 0%,#303820 100%)'
+    ];
+    let portfolioArr = [];
+    function populatePortfolio(portfolio) {
+      portfolioArr = portfolio.map(p => Object.assign({}, p));
+      renderPortfolio();
+    }
+    const CONTENT_TYPES = ['YouTube Shorts','YouTube Video','YouTube Dedicated','Instagram Campaign'];
+
+    function thumbUrl(item) {
+      // Cek thumbnail yang sudah diupload (coba semua ekstensi)
+      return item.thumbnailUrl || null;
+    }
+
+    function renderPortfolio() {
+      const list = document.getElementById('portfolioList');
+      list.innerHTML = '';
+      portfolioArr.forEach(function(item, i) {
+        const row = document.createElement('div');
+        row.className = 'p-card';
+        row.dataset.idx = i;
+
+        const hasThumb = !!item.thumbnailUrl;
+        const thumbStyle = !hasThumb ? item.gradient || '' : '';
+
+        row.innerHTML = `
+          <!-- Thumbnail kolom kiri -->
+          <div class="p-thumb-col">
+            <div class="p-thumb-preview" data-thumb-trigger="${i}" title="Klik untuk upload thumbnail">
+              ${hasThumb
+                ? `<img src="${esc(item.thumbnailUrl)}?${Date.now()}" alt="thumb">`
+                : `<div style="position:absolute;inset:0;background:${thumbStyle}"></div>`
+              }
+              <div class="p-thumb-placeholder" style="${hasThumb ? 'display:none' : ''}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span>Upload</span>
+              </div>
+            </div>
+            <input type="file" accept=".jpg,.jpeg,.png,.webp"
+              style="display:none" data-thumb-input="${i}" id="thumbInput-${i}">
+            <button class="p-thumb-upload-btn" data-thumb-trigger="${i}">
+              ${hasThumb ? '↺ Ganti foto' : '+ Upload thumbnail'}
+            </button>
+          </div>
+
+          <!-- Fields kolom kanan -->
+          <div class="p-fields-col">
+            <div class="p-fields-row">
+              <div class="fg">
+                <label>Nama Brand</label>
+                <input data-pf="brand" value="${esc(item.brand)}">
+              </div>
+              <div class="fg">
+                <label>Tipe Konten</label>
+                <select data-pf="type">
+                  ${CONTENT_TYPES.map(t => {
+                    // match lama "YouTube Video — Ad" → pilih "YouTube Video"
+                    const sel = (t === item.type) ||
+                      (t === 'YouTube Video' && item.type && item.type.startsWith('YouTube Video'));
+                    return `<option${sel ? ' selected' : ''}>${t}</option>`;
+                  }).join('')}
+                </select>
+              </div>
+            </div>
+            <div class="fg">
+              <label>Link Video (YouTube / IG / TikTok)</label>
+              <input data-pf="videoUrl" placeholder="https://..." value="${esc(item.videoUrl||'')}">
+            </div>
+            <div>
+              <button class="p-card-remove" data-remove="${i}">✕ Hapus Item</button>
+            </div>
+          </div>`;
+
+        list.appendChild(row);
+      });
+
+      // Hapus item
+      list.querySelectorAll('[data-remove]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          portfolioArr.splice(parseInt(btn.dataset.remove), 1);
+          renderPortfolio();
+        });
+      });
+
+      // Thumbnail click → trigger file input
+      list.querySelectorAll('[data-thumb-trigger]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          const idx = el.getAttribute('data-thumb-trigger');
+          document.getElementById('thumbInput-' + idx).click();
+        });
+      });
+
+      // Thumbnail file selected → upload langsung
+      list.querySelectorAll('[data-thumb-input]').forEach(function(input) {
+        input.addEventListener('change', async function() {
+          if (!input.files[0]) return;
+          const idx  = input.getAttribute('data-thumb-input');
+          const item = portfolioArr[parseInt(idx)];
+          if (!item) return;
+
+          const file = input.files[0];
+          // Preview lokal dulu
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const preview = list.querySelector(`[data-thumb-trigger="${idx}"].p-thumb-preview`);
+            if (preview) {
+              preview.innerHTML = `<img src="${ev.target.result}" alt="thumb" style="width:100%;height:100%;object-fit:cover;display:block">`;
+              const btn = list.querySelector(`.p-thumb-upload-btn[data-thumb-trigger="${idx}"]`);
+              if (btn) btn.textContent = '↺ Ganti foto';
+            }
+          };
+          reader.readAsDataURL(file);
+
+          // Upload ke server
+          const form = new FormData();
+          form.append('thumb', file);
+          try {
+            const r = await fetch('/api/admin/portfolio-thumb/' + item.id, {
+              method: 'POST',
+              headers: { 'Authorization': 'Bearer ' + TOKEN },
+              body: form
+            });
+            const data = await r.json();
+            if (r.ok && data.url) {
+              portfolioArr[parseInt(idx)].thumbnailUrl = data.url;
+              toast('Thumbnail "' + item.brand + '" berhasil diupload ✓');
+            } else {
+              toast(data.error || 'Gagal upload thumbnail', 'err');
+            }
+          } catch(e) {
+            toast('Error upload: ' + e.message, 'err');
+          }
+        });
+      });
+    }
+
+    document.getElementById('addPortfolioBtn').addEventListener('click', function() {
+      const newItem = {
+        id: String(Date.now()),
+        brand: '',
+        type: 'YouTube Shorts',
+        videoUrl: '',
+        thumbnailUrl: '',
+        gradient: GRADIENTS[portfolioArr.length % GRADIENTS.length]
+      };
+      portfolioArr.push(newItem);
+      renderPortfolio();
+      const last = document.querySelector('#portfolioList .p-card:last-child');
+      if (last) last.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    const savePortfolioBtn = document.getElementById('savePortfolio');
+    savePortfolioBtn.dataset.orig = 'Simpan Portfolio';
+    savePortfolioBtn.addEventListener('click', function() {
+      document.querySelectorAll('#portfolioList .p-card').forEach(function(row, i) {
+        const get = f => row.querySelector('[data-pf="'+f+'"]').value;
+        portfolioArr[i].brand    = get('brand');
+        portfolioArr[i].type     = get('type');
+        portfolioArr[i].videoUrl = get('videoUrl');
+        // thumbnailUrl sudah disync saat upload
+      });
+      saveAll('portfolio', portfolioArr.slice(), 'savePortfolio', 'fbPortfolio');
+    });
+
+    // ══════════════════════════════════════════
+    //  ABOUT PHOTO UPLOAD
+    // ══════════════════════════════════════════
+    function loadCurrentPhoto() {
+      fetch('/api/admin/photo-url', { headers })
+        .then(r => r.json())
+        .then(d => {
+          if (!d.url) return;
+          const box = document.getElementById('photoPreviewBox');
+          const img = new Image();
+          img.onload = () => {
+            box.innerHTML = '';
+            img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center top;display:block;';
+            box.appendChild(img);
+          };
+          img.src = d.url + '?' + Date.now();
+        }).catch(() => {});
+    }
+
+    let selectedPhotoFile = null;
+    const photoDropArea  = document.getElementById('photoDropArea');
+    const photoFileInput = document.getElementById('photoFile');
+
+    photoFileInput.addEventListener('change', function() {
+      if (photoFileInput.files[0]) handlePhotoFile(photoFileInput.files[0]);
+    });
+    photoDropArea.addEventListener('dragover',  e => { e.preventDefault(); photoDropArea.classList.add('drag'); });
+    photoDropArea.addEventListener('dragleave', () => photoDropArea.classList.remove('drag'));
+    photoDropArea.addEventListener('drop', function(e) {
+      e.preventDefault(); photoDropArea.classList.remove('drag');
+      if (e.dataTransfer.files[0]) handlePhotoFile(e.dataTransfer.files[0]);
+    });
+
+    function handlePhotoFile(file) {
+      selectedPhotoFile = file;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const box = document.getElementById('photoPreviewBox');
+        box.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:center top;display:block;';
+        box.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+      document.getElementById('photoSelectedName').textContent = '📎 ' + file.name;
+      document.getElementById('uploadPhotoBtn').disabled = false;
+      document.getElementById('fbPhoto').textContent = '';
+    }
+
+    document.getElementById('uploadPhotoBtn').addEventListener('click', async function() {
+      if (!selectedPhotoFile) return;
+      const btn = document.getElementById('uploadPhotoBtn');
+      const fb  = document.getElementById('fbPhoto');
+      btn.disabled = true; btn.textContent = 'Mengupload...';
+      fb.textContent = '';
+      try {
+        const form = new FormData();
+        form.append('photo', selectedPhotoFile);
+        const r = await fetch('/api/admin/photo', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + TOKEN },
+          body: form
+        });
+        const data = await r.json();
+        if (r.ok && data.success) {
+          toast('Foto profil berhasil diupload! ✓');
+          fb.textContent = 'Upload berhasil ✓';
+          btn.classList.add('success'); btn.textContent = 'Uploaded ✓';
+          setTimeout(() => {
+            btn.classList.remove('success');
+            btn.textContent = 'Upload Foto';
+            btn.disabled = false;
+          }, 2500);
+        } else {
+          throw new Error(data.error || 'Gagal upload');
+        }
+      } catch(e) {
+        toast(e.message, 'err');
+        fb.textContent = e.message;
+        btn.textContent = 'Upload Foto';
+        btn.disabled = false;
+      }
+    });
+
+    // ══════════════════════════════════════════
+    //  FAVICON
+    // ══════════════════════════════════════════
+    function loadCurrentFavicon() {
+      const prev = document.getElementById('faviconPreview');
+      const img  = new Image();
+      img.onload  = () => { prev.innerHTML = ''; prev.appendChild(img); };
+      img.onerror = () => {};
+      img.src = '/public/favicon.ico?' + Date.now();
+      img.style.cssText = 'width:100%;height:100%;object-fit:contain';
+
+      // Also try .png
+      const img2 = new Image();
+      img2.onload = () => { prev.innerHTML = ''; prev.appendChild(img2); };
+      img2.src = '/public/favicon.png?' + Date.now();
+      img2.style.cssText = 'width:100%;height:100%;object-fit:contain';
+    }
+
+    let selectedFaviconFile = null;
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('faviconFile');
+
+    fileInput.addEventListener('change', function() {
+      if (fileInput.files[0]) handleFaviconFile(fileInput.files[0]);
+    });
+    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag'));
+    dropArea.addEventListener('drop', function(e) {
+      e.preventDefault(); dropArea.classList.remove('drag');
+      if (e.dataTransfer.files[0]) handleFaviconFile(e.dataTransfer.files[0]);
+    });
+    function handleFaviconFile(file) {
+      selectedFaviconFile = file;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const prev = document.getElementById('faviconPreview');
+        prev.innerHTML = '<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:contain">';
+      };
+      reader.readAsDataURL(file);
+      document.getElementById('fbFavicon').textContent = file.name + ' dipilih';
+      document.getElementById('uploadFaviconBtn').disabled = false;
+    }
+
+    document.getElementById('uploadFaviconBtn').addEventListener('click', async function() {
+      if (!selectedFaviconFile) return;
+      const btn = document.getElementById('uploadFaviconBtn');
+      btn.disabled = true; btn.textContent = 'Mengupload...';
+      const fb = document.getElementById('fbFavicon');
+      try {
+        const form = new FormData();
+        form.append('favicon', selectedFaviconFile);
+        const r = await fetch('/api/admin/favicon', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + TOKEN },
+          body: form
+        });
+        const data = await r.json();
+        if (r.ok) {
+          toast('Favicon berhasil diupload!');
+          fb.textContent = 'Upload berhasil ✓';
+          btn.classList.add('success'); btn.textContent = 'Uploaded ✓';
+          setTimeout(() => { btn.classList.remove('success'); btn.textContent = 'Upload Favicon'; btn.disabled = false; }, 2500);
+        } else {
+          throw new Error(data.error || 'Gagal upload');
+        }
+      } catch(e) {
+        toast(e.message, 'err');
+        fb.textContent = e.message;
+        btn.textContent = 'Upload Favicon'; btn.disabled = false;
+      }
+    });
+
+    // ══════════════════════════════════════════
+    //  INBOX
+    // ══════════════════════════════════════════
+    async function loadInbox() {
+      const tbody = document.getElementById('inboxBody');
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Memuat...</td></tr>';
+      try {
+        const r    = await api('GET', '/api/admin/submissions');
+        const rows = await r.json();
+        const badge = document.getElementById('inboxBadge');
+        if (rows.length > 0) {
+          badge.textContent = rows.length;
+          badge.style.display = 'inline';
+        } else {
+          badge.style.display = 'none';
+        }
+        if (!rows.length) {
+          tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Belum ada inquiry masuk</td></tr>';
+          return;
+        }
+        tbody.innerHTML = rows.map(function(row) {
+          const d = new Date(row.submitted_at);
+          const date = d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+          const time = d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+          return `<tr>
+            <td class="td-name">${esc(row.name||'—')}</td>
+            <td class="td-email">${esc(row.email||'—')}</td>
+            <td>${esc(row.brand||'—')}</td>
+            <td>${esc(row.budget||'—')}</td>
+            <td class="td-msg">${esc((row.message||'—').substring(0,100))}${row.message&&row.message.length>100?'…':''}</td>
+            <td class="td-date">${date}<br>${time}</td>
+            <td><button class="del-btn" data-id="${row.id}" title="Hapus">✕</button></td>
+          </tr>`;
+        }).join('');
+        tbody.querySelectorAll('.del-btn').forEach(function(btn) {
+          btn.addEventListener('click', async function() {
+            if (!confirm('Hapus submission ini?')) return;
+            await api('DELETE', '/api/admin/submissions/' + btn.dataset.id);
+            loadInbox();
+          });
+        });
+      } catch(e) {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Gagal memuat: '+e.message+'</td></tr>';
+      }
+    }
+
+    // ── Util ─────────────────────────────────
+    function esc(str) {
+      return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Init ─────────────────────────────────
+    loadContent();
+  })();
+  </script>
+</body>
+</html>

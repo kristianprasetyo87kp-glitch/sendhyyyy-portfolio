@@ -1,0 +1,20 @@
+# Secrets — jangan pernah masuk repo
+.env
+
+# Dependencies
+node_modules/
+
+# SQLite database (data runtime, bukan source)
+data/submissions.db
+
+# Uploaded files (disimpan di Railway Volume, bukan repo)
+public/thumbs/*
+public/favicon.*
+public/photo.*
+
+# Tapi pastikan folder thumbs tetap ada di repo
+!public/thumbs/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
