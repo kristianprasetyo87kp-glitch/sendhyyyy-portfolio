@@ -356,6 +356,17 @@ app.get('/api/photo-url', (req, res) => {
   res.json({ url: null });
 });
 
+// GET /api/favicon-url — public: dipakai index.html untuk load favicon yang diupload
+app.get('/api/favicon-url', (req, res) => {
+  const exts = ['.ico', '.png', '.svg'];
+  for (const ext of exts) {
+    if (fs.existsSync(path.join(UPLOADS_DIR, 'favicon' + ext))) {
+      return res.json({ url: `/public/favicon${ext}`, ext });
+    }
+  }
+  res.json({ url: null });
+});
+
 // GET /api/admin/submissions
 app.get('/api/admin/submissions', requireAuth, (req, res) => {
   const rows = db.prepare('SELECT * FROM submissions ORDER BY submitted_at DESC').all();

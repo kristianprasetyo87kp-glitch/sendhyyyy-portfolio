@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sendhy Tangkudung — Content Creator</title>
   <link rel="icon" id="faviconLink" href="/public/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" id="faviconLink2" href="/public/favicon.ico">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
@@ -1432,6 +1433,18 @@
     }).catch(function(){
       // Gagal fetch: tampilkan konten statis yang sudah ada, tidak ada yang rusak
     });
+
+    // ── Favicon ────────────────────────────
+    fetch('/api/favicon-url').then(function(r){return r.json();}).then(function(d){
+      if(!d.url) return;
+      var mimeMap = {'.ico':'image/x-icon','.png':'image/png','.svg':'image/svg+xml'};
+      var mime = mimeMap[d.ext] || 'image/x-icon';
+      var bust = d.url + '?t=' + Date.now();
+      ['faviconLink','faviconLink2'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el){ el.setAttribute('href', bust); el.setAttribute('type', mime); }
+      });
+    }).catch(function(){});
 
     // ── About Photo ────────────────────────
     fetch('/api/photo-url').then(function(r){return r.json();}).then(function(d){
