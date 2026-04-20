@@ -1,17 +1,17 @@
 {
   "about": {
-    "bio1": "Jakarta-based content creator with a passion for beauty, lifestyle, and authentic storytelling. With a cross-platform presence spanning YouTube, Instagram, and TikTok, she builds genuine connections between brands and real audiences.",
-    "bio2": "She believes great content doesn't feel like advertising — it feels like a recommendation from a friend. Every collaboration is crafted with that intention.",
+    "bio1": "I’m Sendhy Tangkudung, a Jakarta based content creator turning everyday tech into something aesthetic and personal. I love playing with customization, curated visuals, and little details that make your digital space feel so you. ",
+    "bio2": "Because the best content isn’t just seen, it’s a vibe you want to live in :)",
     "stat1": {
-      "number": "130K+",
+      "number": "1M+",
       "label": "Total Audience"
     },
     "stat2": {
-      "number": "48+",
+      "number": "40+",
       "label": "Brand Collabs"
     },
     "stat3": {
-      "number": "3 Yrs+",
+      "number": "5 Yrs+",
       "label": "Experience"
     }
   },
@@ -49,16 +49,16 @@
       "tags": "Full Review · Product Integration"
     },
     {
-      "name": "YouTube Video (dedicated / intergrated)",
+      "name": "YouTube Video",
       "price": "From IDR 1.500.000",
-      "description": "2–3 minute advertisement with seamless product integration within a longer video. Feels organic, performs like paid.",
+      "description": "2–3 minute advertisement with seamless product integration within a longer video. Feels organic, performs like paid. (dedicated / intergrated)",
       "tags": "2–3 Min · Ad Format · Product Integration"
     },
     {
       "name": "TikTok Video",
       "price": "From IDR 500.000",
-      "description": "Full-length dedicated YouTube review (8–15 min). Deep-dive product storytelling with high retention and evergreen value.",
-      "tags": "Full YouTube Review · Dedicated Video"
+      "description": "Create TikTok content that doesn’t feel salesy, but still hits.\nFrom ideation to shooting to editing, everything is crafted to make your brand stand out on the FYP.",
+      "tags": "20 - 30 Sec Video Tiktok"
     },
     {
       "name": "Instagram Reels",
@@ -68,21 +68,35 @@
     }
   ],
   "brands": [
-    "Wardah",
-    "Somethinc",
-    "Erha Dermatology",
-    "Pigeon",
-    "Scarlett Whitening",
-    "Mineral Botanica",
-    "Dear Me Beauty",
-    "Hada Labo",
-    "Emina Cosmetics",
-    "BLP Beauty"
+    "MOFT",
+    "Casebang",
+    "ESR Tech",
+    "Casekoo",
+    "Telesin",
+    "SODI",
+    "Aesthetic App",
+    "BeautyPlus App",
+    "iScreen App",
+    "Goojodoq",
+    "Technova",
+    "Joytech",
+    "NTZen Case",
+    "Jplus Case",
+    "Caselify",
+    "Levino Case",
+    "UPPU Tripod",
+    "POP Mart",
+    "Lentiven",
+    "Mico Widget",
+    "MD Widget",
+    "Grace and Glow",
+    "REINKSTONE",
+    "HitPaw"
   ],
   "portfolio": [
     {
       "id": "1",
-      "brand": "Somethinc",
+      "brand": "ESR Tech",
       "type": "YouTube Video",
       "videoUrl": "https://www.youtube.com/watch?v=1AtPBJhGF4c",
       "gradient": "linear-gradient(148deg,#3A2A20 0%,#4A3228 50%,#322018 100%)",
@@ -90,58 +104,58 @@
     },
     {
       "id": "2",
-      "brand": "Wardah",
-      "type": "YouTube Shorts",
-      "videoUrl": "",
+      "brand": "Casekoo",
+      "type": "YouTube Video",
+      "videoUrl": "https://youtu.be/qjWToz6jKqw?si=WiQDietaqXTbBTGw",
       "gradient": "linear-gradient(148deg,#2A2430 0%,#382E42 100%)"
     },
     {
       "id": "3",
-      "brand": "BLP Beauty",
-      "type": "Instagram Campaign",
-      "videoUrl": "",
+      "brand": "BeautyPlus App",
+      "type": "YouTube Dedicated",
+      "videoUrl": "https://youtu.be/ISaarN85Qho?si=vJV8WotT7hErDunx",
       "gradient": "linear-gradient(148deg,#342018 0%,#4A2C24 100%)"
     },
     {
       "id": "4",
-      "brand": "Scarlett",
+      "brand": "Casebang",
       "type": "YouTube Video",
-      "videoUrl": "",
+      "videoUrl": "https://youtu.be/hkBDHuwMK3w?si=Pl3WkGG2r-FNUKx6",
       "gradient": "linear-gradient(148deg,#1E2A1C 0%,#2C3C28 100%)"
     },
     {
       "id": "5",
-      "brand": "Mineral Botanica",
+      "brand": "Casebang",
       "type": "YouTube Dedicated",
-      "videoUrl": "",
+      "videoUrl": "https://youtu.be/hkBDHuwMK3w?si=Pl3WkGG2r-FNUKx6",
       "gradient": "linear-gradient(148deg,#2E2018 0%,#3E2C22 50%,#2A1C14 100%)"
     },
     {
       "id": "6",
-      "brand": "Dear Me Beauty",
-      "type": "YouTube Shorts",
-      "videoUrl": "",
+      "brand": "BeautyPlus App",
+      "type": "TikTok Video",
+      "videoUrl": "https://www.tiktok.com/@bysend/video/7448200192148393237?is_from_webapp=1&sender_device=pc&web_id=7599954832954656276",
       "gradient": "linear-gradient(148deg,#28241C 0%,#38342A 100%)"
     },
     {
       "id": "7",
-      "brand": "Hada Labo",
-      "type": "Instagram Campaign",
-      "videoUrl": "",
+      "brand": "iScreen App",
+      "type": "TikTok Video",
+      "videoUrl": "https://www.tiktok.com/@bysend/video/7489849885370371336?is_from_webapp=1&sender_device=pc&web_id=7599954832954656276",
       "gradient": "linear-gradient(148deg,#1E2430 0%,#28303E 100%)"
     },
     {
       "id": "8",
-      "brand": "Emina",
-      "type": "YouTube Video",
-      "videoUrl": "",
+      "brand": "MD Widget App",
+      "type": "TikTok Video",
+      "videoUrl": "https://www.tiktok.com/@bysend/video/7455907161516805384?is_from_webapp=1&sender_device=pc&web_id=7599954832954656276",
       "gradient": "linear-gradient(148deg,#302418 0%,#42332A 100%)"
     },
     {
       "id": "9",
-      "brand": "Pigeon",
-      "type": "YouTube Dedicated",
-      "videoUrl": "",
+      "brand": "BeautyPlus App",
+      "type": "TikTok Video",
+      "videoUrl": "https://www.tiktok.com/@bysend/video/7448450037807467796?is_from_webapp=1&sender_device=pc&web_id=7599954832954656276",
       "gradient": "linear-gradient(148deg,#22281C 0%,#303820 100%)"
     }
   ]
