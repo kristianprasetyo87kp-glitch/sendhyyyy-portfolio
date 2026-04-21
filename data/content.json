@@ -17,11 +17,11 @@
   },
   "social": [
     {
-      "platform": "Instagram",
-      "handle": "@sendhyyyy",
-      "metric1": "1,1K",
-      "metric1Label": "Followers",
-      "metric2": "5.2%",
+      "platform": "YouTube",
+      "handle": "sendhyyyy",
+      "metric1": "20,8K",
+      "metric1Label": "Subscribers",
+      "metric2": "4.1%",
       "metric2Label": "Avg. Engagement"
     },
     {
@@ -33,11 +33,11 @@
       "metric2Label": "Avg. Engagement"
     },
     {
-      "platform": "YouTube",
-      "handle": "sendhyyyy",
-      "metric1": "20,8K",
-      "metric1Label": "Subscribers",
-      "metric2": "4.1%",
+      "platform": "Instagram",
+      "handle": "@sendhyyyy",
+      "metric1": "1,1K",
+      "metric1Label": "Followers",
+      "metric2": "5.2%",
       "metric2Label": "Avg. Engagement"
     }
   ],
