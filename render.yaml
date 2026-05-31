@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: sendhyyyy-portfolio
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node --experimental-sqlite server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.12.0

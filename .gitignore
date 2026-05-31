@@ -7,7 +7,7 @@ node_modules/
 # SQLite database (data runtime, bukan source)
 data/submissions.db
 
-# Uploaded files (disimpan di Railway Volume, bukan repo)
+# Uploaded files (ephemeral di free hosting)
 public/thumbs/*
 public/favicon.*
 public/photo.*
