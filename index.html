@@ -1306,9 +1306,18 @@
         return;
       }
       fsb.disabled=true; fsb.textContent='Sending...';
+      var ctrl=new AbortController();
+      var tid=setTimeout(function(){ctrl.abort();},15000); // 15s timeout
+      function resetBtn(msg){
+        clearTimeout(tid);
+        fsb.textContent=msg||'Send Inquiry';
+        fsb.style.color=''; fsb.style.borderColor='';
+        fsb.disabled=false;
+      }
       fetch('/api/submit',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
+        signal:ctrl.signal,
         body:JSON.stringify({
           name:    name,
           brand:   document.getElementById('cf-brand').value,
@@ -1316,25 +1325,24 @@
           email:   email,
           message: document.getElementById('cf-msg').value
         })
-      }).then(function(r){return r.json();}).then(function(data){
+      }).then(function(r){clearTimeout(tid);return r.json();}).then(function(data){
         if(data.success){
           fsb.textContent='Sent ✓';
           fsb.style.color='var(--accent)';
           fsb.style.borderColor='var(--accent)';
           cf.reset();
-          setTimeout(function(){
-            fsb.textContent='Send Inquiry';
-            fsb.style.color='';
-            fsb.style.borderColor='';
-            fsb.disabled=false;
-          },3500);
+          setTimeout(function(){ resetBtn('Send Inquiry'); },3500);
+        } else {
+          setTimeout(function(){ resetBtn('Send Inquiry'); },2000);
+          fsb.textContent='Error — coba lagi';
+        }
+      }).catch(function(err){
+        if(err&&err.name==='AbortError'){
+          fsb.textContent='Timeout — coba lagi';
         } else {
           fsb.textContent='Error — coba lagi';
-          fsb.disabled=false;
         }
-      }).catch(function(){
-        fsb.textContent='Error — coba lagi';
-        fsb.disabled=false;
+        setTimeout(function(){ resetBtn('Send Inquiry'); },2500);
       });
     });
 
