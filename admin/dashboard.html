@@ -1255,7 +1255,7 @@
           return;
         }
         tbody.innerHTML = rows.map(function(row) {
-          const d = new Date(row.submitted_at);
+          const d = new Date(row.submitted_at.replace(' ', 'T') + 'Z');
           const date = d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
           const time = d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
           return `<tr>

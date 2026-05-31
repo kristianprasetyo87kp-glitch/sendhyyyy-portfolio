@@ -249,20 +249,16 @@ app.post('/api/submit', async (req, res) => {
     </div>
   `;
 
-  try {
-    await transporter.sendMail({
-      from:    `"Sendhy Portfolio" <${process.env.EMAIL_USER}>`,
-      to:      process.env.EMAIL_TO,
-      replyTo: email,
-      subject: `New Inquiry from ${name}${brand ? ' — ' + brand : ''}`,
-      html:    htmlEmail
-    });
-  } catch (e) {
-    // Email gagal tapi submission sudah tersimpan — tetap sukses ke user
-    console.error('Email Error:', e.message);
-  }
-
+  // Kirim response dulu agar button langsung reset, email dikirim di background
   res.json({ success: true, message: 'Pesan terkirim. Terima kasih!' });
+
+  transporter.sendMail({
+    from:    `"Sendhy Portfolio" <${process.env.EMAIL_USER}>`,
+    to:      process.env.EMAIL_TO,
+    replyTo: email,
+    subject: `New Inquiry from ${name}${brand ? ' — ' + brand : ''}`,
+    html:    htmlEmail
+  }).catch(e => console.error('Email Error:', e.message));
 });
 
 // ─────────────────────────────────────────────
