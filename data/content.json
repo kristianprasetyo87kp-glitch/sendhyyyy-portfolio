@@ -22,7 +22,8 @@
       "metric1": "20,8K",
       "metric1Label": "Subscribers",
       "metric2": "4.1%",
-      "metric2Label": "Avg. Engagement"
+      "metric2Label": "Avg. Engagement",
+      "url": "https://www.youtube.com/@sendhyyyy"
     },
     {
       "platform": "TikTok",
@@ -30,15 +31,17 @@
       "metric1": "2,9K",
       "metric1Label": "Followers",
       "metric2": "8.7%",
-      "metric2Label": "Avg. Engagement"
+      "metric2Label": "Avg. Engagement",
+      "url": "https://www.tiktok.com/@bysend"
     },
     {
-      "platform": "Instagram",
-      "handle": "@sendhyyyy",
+      "platform": "Pinterest",
+      "handle": "sendhyyyy",
       "metric1": "1,1K",
       "metric1Label": "Followers",
       "metric2": "5.2%",
-      "metric2Label": "Avg. Engagement"
+      "metric2Label": "Avg. Engagement",
+      "url": "https://www.pinterest.com/sendhyyyy"
     }
   ],
   "services": [

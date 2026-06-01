@@ -792,6 +792,10 @@
               <input data-field="metric2" value="${s.metric2}"></div>
             <div class="fg"><label>Label Metrik 2</label>
               <input data-field="metric2Label" value="${s.metric2Label}"></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Link Channel (URL)</label>
+              <input data-field="url" value="${s.url||''}" placeholder="https://..."></div>
           </div>`;
         card.dataset.idx = i;
         list.appendChild(card);
@@ -806,7 +810,8 @@
         return {
           platform: get('platform'), handle: get('handle'),
           metric1: get('metric1'), metric1Label: get('metric1Label'),
-          metric2: get('metric2'), metric2Label: get('metric2Label')
+          metric2: get('metric2'), metric2Label: get('metric2Label'),
+          url: get('url')
         };
       });
       saveAll('social', data, 'saveSocial', 'fbSocial');
