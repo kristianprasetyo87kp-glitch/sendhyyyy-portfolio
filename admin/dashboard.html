@@ -212,12 +212,25 @@
     .p-card {
       background: #1C1510;
       border: 1px solid rgba(138,122,112,0.14);
-      padding: 1.2rem 1.4rem;
+      padding: 1.2rem 1.4rem 1.2rem 0.6rem;
       display: grid;
-      grid-template-columns: 120px 1fr;
+      grid-template-columns: 22px 120px 1fr;
       gap: 1.2rem;
       align-items: start;
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s;
     }
+    .p-drag-handle {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 0.4rem;
+      cursor: grab; color: rgba(138,122,112,0.35);
+      user-select: none; transition: color 0.2s;
+    }
+    .p-drag-handle:hover { color: rgba(138,122,112,0.8); }
+    .p-drag-handle:active { cursor: grabbing; }
+    .p-card.dragging { opacity: 0.35; border-style: dashed; border-color: rgba(138,122,112,0.4); }
+    .p-card.drag-over { border-color: #C5958A; background: rgba(197,149,138,0.06); }
+    .p-card.drag-over-above { border-top: 2px solid #C5958A; }
+    .p-card.drag-over-below { border-bottom: 2px solid #C5958A; }
 
     /* Thumbnail column */
     .p-thumb-col { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -379,7 +392,7 @@
     @media (max-width: 900px) {
       .sidebar { width: 200px; }
       .main { margin-left: 200px; max-width: calc(100% - 200px); padding: 1.8rem 1.5rem; }
-      .p-card { grid-template-columns: 1fr 1fr; }
+      .p-card { grid-template-columns: 22px 1fr 1fr; }
       .p-card-remove { grid-column: 1 / -1; width: fit-content; }
     }
     @media (max-width: 640px) {
@@ -935,11 +948,20 @@
         const row = document.createElement('div');
         row.className = 'p-card';
         row.dataset.idx = i;
+        row.draggable = true;
 
         const hasThumb = !!item.thumbnailUrl;
         const thumbStyle = !hasThumb ? item.gradient || '' : '';
 
         row.innerHTML = `
+          <!-- Drag handle -->
+          <div class="p-drag-handle" title="Drag untuk reorder">
+            <svg width="14" height="20" viewBox="0 0 14 20" fill="currentColor">
+              <circle cx="4" cy="4" r="1.8"/><circle cx="10" cy="4" r="1.8"/>
+              <circle cx="4" cy="10" r="1.8"/><circle cx="10" cy="10" r="1.8"/>
+              <circle cx="4" cy="16" r="1.8"/><circle cx="10" cy="16" r="1.8"/>
+            </svg>
+          </div>
           <!-- Thumbnail kolom kiri -->
           <div class="p-thumb-col">
             <div class="p-thumb-preview" data-thumb-trigger="${i}" title="Klik untuk upload thumbnail">
@@ -992,6 +1014,53 @@
           </div>`;
 
         list.appendChild(row);
+
+        // ── Drag & Drop events ──────────────────
+        row.addEventListener('dragstart', function(e) {
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', String(i));
+          setTimeout(function(){ row.classList.add('dragging'); }, 0);
+        });
+        row.addEventListener('dragend', function() {
+          row.classList.remove('dragging');
+          list.querySelectorAll('.p-card').forEach(function(c){
+            c.classList.remove('drag-over','drag-over-above','drag-over-below');
+          });
+        });
+        row.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          list.querySelectorAll('.p-card').forEach(function(c){
+            c.classList.remove('drag-over-above','drag-over-below');
+          });
+          var rect = row.getBoundingClientRect();
+          var mid  = rect.top + rect.height / 2;
+          if(e.clientY < mid) {
+            row.classList.add('drag-over-above');
+            row.classList.remove('drag-over-below');
+          } else {
+            row.classList.add('drag-over-below');
+            row.classList.remove('drag-over-above');
+          }
+        });
+        row.addEventListener('dragleave', function() {
+          row.classList.remove('drag-over-above','drag-over-below');
+        });
+        row.addEventListener('drop', function(e) {
+          e.preventDefault();
+          var fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+          var toIdx   = parseInt(row.dataset.idx);
+          if(fromIdx === toIdx) return;
+          var rect = row.getBoundingClientRect();
+          var mid  = rect.top + rect.height / 2;
+          var insertAfter = e.clientY >= mid;
+          var moved = portfolioArr.splice(fromIdx, 1)[0];
+          var newTo = insertAfter ? toIdx : toIdx;
+          if(fromIdx < toIdx && !insertAfter) newTo = toIdx - 1;
+          if(fromIdx > toIdx && insertAfter)  newTo = toIdx + 1;
+          portfolioArr.splice(newTo < 0 ? 0 : newTo, 0, moved);
+          renderPortfolio();
+        });
       });
 
       // Hapus item
