@@ -1,13 +1,13 @@
 {
   "about": {
-    "bio1": "I’m Sendhy Tangkudung, a Jakarta based content creator turning everyday tech into something aesthetic and personal. I love playing with customization, curated visuals, and little details that make your digital space feel so you. ",
-    "bio2": "Because the best content isn’t just seen, it’s a vibe you want to live in :)",
+    "bio1": "Hi, i'm Sendhy. I love sharing aesthetic inspiration through customization, curated finds, cozy spaces and everyday moments that spark creativity.\nFrom personalizing digital spaces to discovering cute accesories and lifestyle finds, my goal is to create content that feels relatable, creative and enjoyable",
+    "bio2": "Because the best inspiration often comes from the little things ♡",
     "stat1": {
-      "number": "1M+",
+      "number": "10M+",
       "label": "Total Audience"
     },
     "stat2": {
-      "number": "40+",
+      "number": "100+",
       "label": "Brand Collabs"
     },
     "stat3": {
@@ -18,17 +18,17 @@
   "social": [
     {
       "platform": "YouTube",
-      "handle": "sendhyyyy",
-      "metric1": "20,8K",
+      "handle": "@sendhyyyy",
+      "metric1": "20.9K",
       "metric1Label": "Subscribers",
-      "metric2": "4.1%",
+      "metric2": "8.5%",
       "metric2Label": "Avg. Engagement",
       "url": "https://www.youtube.com/@sendhyyyy"
     },
     {
       "platform": "TikTok",
       "handle": "@bysend",
-      "metric1": "2,9K",
+      "metric1": "3K",
       "metric1Label": "Followers",
       "metric2": "8.7%",
       "metric2Label": "Avg. Engagement",
@@ -36,8 +36,8 @@
     },
     {
       "platform": "Pinterest",
-      "handle": "sendhyyyy",
-      "metric1": "1,1K",
+      "handle": "@sendhyyyy",
+      "metric1": "17.4K",
       "metric1Label": "Followers",
       "metric2": "5.2%",
       "metric2Label": "Avg. Engagement",
@@ -47,27 +47,27 @@
   "services": [
     {
       "name": "YouTube Shorts",
-      "price": "From IDR 500.000",
+      "price": "From IDR 650.000",
       "description": "Short-form vertical video review with natural product integration. Ideal for quick brand awareness and reaching younger audiences.",
-      "tags": "Full Review · Product Integration"
+      "tags": "Full Review · Product Integration "
     },
     {
       "name": "YouTube Video",
       "price": "From IDR 1.500.000",
-      "description": "2–3 minute advertisement with seamless product integration within a longer video. Feels organic, performs like paid. (dedicated / intergrated)",
-      "tags": "2–3 Min · Ad Format · Product Integration"
+      "description": "Dedicated or integrated video content featuring yout product or service through reviews, demonstrations, unboxing, tutorials, or lifestyle focused storytelling.",
+      "tags": "Ad Format · Product Dedicated · Product Integrated 2–3 Min"
     },
     {
       "name": "TikTok Video",
       "price": "From IDR 500.000",
-      "description": "Create TikTok content that doesn’t feel salesy, but still hits.\nFrom ideation to shooting to editing, everything is crafted to make your brand stand out on the FYP.",
-      "tags": "20 - 30 Sec Video Tiktok"
+      "description": "Creative short-form videos featuring authentic experiences, aesthetic visuals and relatable storytelling that help brands connect with a highly engaged audience",
+      "tags": "Full Review · Product Integration "
     },
     {
       "name": "Instagram Reels",
       "price": "From IDR 500.000",
-      "description": "Tailored Instagram content package including feed posts, Stories, and Reels. Designed for sustained brand presence and engagement.",
-      "tags": "Posts · Stories · Reels · Custom Duration"
+      "description": "Aesthetic and engaging Reels that showcase products naturally through creative visuals, everyday moments and content designed to inspire and connect",
+      "tags": "Full Review · Product Integration "
     }
   ],
   "brands": [
@@ -94,9 +94,19 @@
     "MD Widget",
     "Grace and Glow",
     "REINKSTONE",
-    "HitPaw"
+    "HitPaw",
+    "Casetify",
+    "Geekshare",
+    "Benks"
   ],
   "portfolio": [
+    {
+      "id": "5",
+      "brand": "Casebang",
+      "type": "YouTube Dedicated",
+      "videoUrl": "https://youtu.be/hkBDHuwMK3w?si=Pl3WkGG2r-FNUKx6",
+      "gradient": "linear-gradient(148deg,#2E2018 0%,#3E2C22 50%,#2A1C14 100%)"
+    },
     {
       "id": "1",
       "brand": "ESR Tech",
@@ -113,13 +123,6 @@
       "gradient": "linear-gradient(148deg,#2A2430 0%,#382E42 100%)"
     },
     {
-      "id": "3",
-      "brand": "BeautyPlus App",
-      "type": "YouTube Dedicated",
-      "videoUrl": "https://youtu.be/ISaarN85Qho?si=vJV8WotT7hErDunx",
-      "gradient": "linear-gradient(148deg,#342018 0%,#4A2C24 100%)"
-    },
-    {
       "id": "4",
       "brand": "Casebang",
       "type": "YouTube Video",
@@ -127,11 +130,11 @@
       "gradient": "linear-gradient(148deg,#1E2A1C 0%,#2C3C28 100%)"
     },
     {
-      "id": "5",
-      "brand": "Casebang",
+      "id": "3",
+      "brand": "BeautyPlus App",
       "type": "YouTube Dedicated",
-      "videoUrl": "https://youtu.be/hkBDHuwMK3w?si=Pl3WkGG2r-FNUKx6",
-      "gradient": "linear-gradient(148deg,#2E2018 0%,#3E2C22 50%,#2A1C14 100%)"
+      "videoUrl": "https://youtu.be/ISaarN85Qho?si=vJV8WotT7hErDunx",
+      "gradient": "linear-gradient(148deg,#342018 0%,#4A2C24 100%)"
     },
     {
       "id": "6",
@@ -148,18 +151,18 @@
       "gradient": "linear-gradient(148deg,#1E2430 0%,#28303E 100%)"
     },
     {
-      "id": "8",
-      "brand": "MD Widget App",
-      "type": "TikTok Video",
-      "videoUrl": "https://www.tiktok.com/@bysend/video/7455907161516805384?is_from_webapp=1&sender_device=pc&web_id=7599954832954656276",
-      "gradient": "linear-gradient(148deg,#302418 0%,#42332A 100%)"
-    },
-    {
       "id": "9",
       "brand": "BeautyPlus App",
       "type": "TikTok Video",
       "videoUrl": "https://www.tiktok.com/@bysend/video/7448450037807467796?is_from_webapp=1&sender_device=pc&web_id=7599954832954656276",
       "gradient": "linear-gradient(148deg,#22281C 0%,#303820 100%)"
+    },
+    {
+      "id": "8",
+      "brand": "JPlusID",
+      "type": "TikTok Video",
+      "videoUrl": "",
+      "gradient": "linear-gradient(148deg,#302418 0%,#42332A 100%)"
     }
   ]
 }
