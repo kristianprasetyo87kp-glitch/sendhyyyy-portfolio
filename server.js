@@ -257,13 +257,23 @@ app.post('/api/submit', async (req, res) => {
   // Kirim response dulu agar button langsung reset, email dikirim di background
   res.json({ success: true, message: 'Pesan terkirim. Terima kasih!' });
 
-  transporter.sendMail({
-    from:    `"Sendhy Portfolio" <${process.env.EMAIL_USER}>`,
-    to:      process.env.EMAIL_TO,
-    replyTo: email,
-    subject: `New Inquiry from ${name}${brand ? ' — ' + brand : ''}`,
-    html:    htmlEmail
-  }).catch(e => console.error('Email Error:', e.message));
+  // Kirim via Resend HTTP API (tidak pakai SMTP)
+  fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type':  'application/json'
+    },
+    body: JSON.stringify({
+      from:     'Sendhy Portfolio <onboarding@resend.dev>',
+      to:       [process.env.EMAIL_TO || process.env.EMAIL_USER],
+      reply_to: email,
+      subject:  `New Inquiry from ${name}${brand ? ' — ' + brand : ''}`,
+      html:     htmlEmail
+    })
+  }).then(r => r.json())
+    .then(d => { if(d.id) console.log('Email sent:', d.id); else console.error('Resend error:', JSON.stringify(d)); })
+    .catch(e => console.error('Email Error:', e.message));
 });
 
 // ─────────────────────────────────────────────
@@ -371,15 +381,21 @@ app.get('/api/favicon-url', (req, res) => {
 // GET /api/admin/test-email — test kirim email (hapus setelah debug)
 app.get('/api/admin/test-email', requireAuth, async (req, res) => {
   try {
-    await transporter.sendMail({
-      from:    `"Sendhy Portfolio" <${process.env.EMAIL_USER}>`,
-      to:      process.env.EMAIL_TO,
-      subject: 'Test Email — Sendhy Portfolio',
-      text:    'Email berhasil terkirim dari server Render!'
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from:    'Sendhy Portfolio <onboarding@resend.dev>',
+        to:      [process.env.EMAIL_TO || process.env.EMAIL_USER],
+        subject: 'Test Email — Sendhy Portfolio',
+        html:    '<p>Email berhasil terkirim dari server Render via Resend! ✅</p>'
+      })
     });
-    res.json({ success: true, from: process.env.EMAIL_USER, to: process.env.EMAIL_TO });
+    const d = await r.json();
+    if(d.id) res.json({ success: true, id: d.id, to: process.env.EMAIL_TO });
+    else res.status(500).json({ success: false, error: JSON.stringify(d) });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message, from: process.env.EMAIL_USER, to: process.env.EMAIL_TO });
+    res.status(500).json({ success: false, error: e.message });
   }
 });
 
