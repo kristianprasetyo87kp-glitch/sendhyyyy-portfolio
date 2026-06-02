@@ -363,6 +363,21 @@ app.get('/api/favicon-url', (req, res) => {
   res.json({ url: null });
 });
 
+// GET /api/admin/test-email — test kirim email (hapus setelah debug)
+app.get('/api/admin/test-email', requireAuth, async (req, res) => {
+  try {
+    await transporter.sendMail({
+      from:    `"Sendhy Portfolio" <${process.env.EMAIL_USER}>`,
+      to:      process.env.EMAIL_TO,
+      subject: 'Test Email — Sendhy Portfolio',
+      text:    'Email berhasil terkirim dari server Render!'
+    });
+    res.json({ success: true, from: process.env.EMAIL_USER, to: process.env.EMAIL_TO });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message, from: process.env.EMAIL_USER, to: process.env.EMAIL_TO });
+  }
+});
+
 // GET /api/admin/submissions
 app.get('/api/admin/submissions', requireAuth, (req, res) => {
   const rows = db.prepare('SELECT * FROM submissions ORDER BY submitted_at DESC').all();
